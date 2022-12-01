@@ -1,0 +1,50 @@
+
+.section {
+  grid-column: 1 / 5;
+}
+
+.preHeader {
+  font-size: 16px;
+  font-weight: 200;
+  text-transform: uppercase;
+  color: var(--primary);
+  grid-column: 1 / 5;
+  margin: 1rem 0;
+}
+
+.header {
+  grid-column: 1/5;
+  color: var(--secondary);
+  font-family: inter, Sans-serif;
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 0.8;
+  margin: 1rem 0;
+}
+
+.description {
+  grid-column: 1/5;
+  margin: 1rem 0;
+  line-height: 22.5px;
+  font-size: 15px;
+  font-weight: 100;
+}
+
+.sectionDescriptionVariant {
+  grid-column: 1/5;
+  margin: 1rem 0;
+  line-height: 22.5px;
+  font-size: 15px;
+  font-weight: 100;
+  background-color: var(--tertiary);
+  padding: 1rem;
+  margin: -1rem;
+}
+
+.sectionDescription {
+  grid-column: 1/5;
+  margin: 1rem 0;
+  line-height: 22.5px;
+  font-size: 15px;
+  font-weight: 100;
+}

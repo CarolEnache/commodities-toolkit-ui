@@ -3,13 +3,13 @@ import Hamburger from 'hamburger-react'
 
 import Link from 'next/link'
 import Head from "next/head";
-import Image from "next/image";
-
 import type { NextPage } from "next";
 
 
 import { MathematicalSymbol, IntegralSymbol, Estimate, Analysis, Community, Facebook, Twitter, LinkedIn } from "../components/icons";
 import { Navigation } from "../components/nav/Navigation";
+import { SectionCard } from "../components/cards/section-card/SectionCard";
+import { SimpleCard } from "../components/cards/simple-card/SimpleCard";
 
 import styles from "../styles/Home.module.css";
 
@@ -34,7 +34,6 @@ const Home: NextPage = () => {
           backgroundImage: "url(/hero.png)",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          // transform: `scale(1.5)`,
           gridColumn: "1 / -1",
         }}
       >
@@ -45,26 +44,26 @@ const Home: NextPage = () => {
       </Link>
 
       <main className={styles.main}>
-        <section className={styles.section}>
-          <h4 className={styles.preHeader}>SOCIO ECONOMIC ANALYSIS </h4>
-          <h1 className={styles.header}>
-            We are experts at socio-economic analysis based on input-output modelling.
-          </h1>
-          <p className={styles.sectionDescription}>Input-output analysis is a type of economic model that describes the interdependent relationships between industrial sectors within an economy. It shows how the outputs of one sector flow into another sector as inputs. Wassily Leontief, who was a Soviet-American economist, developed the input-output analysis method, earning him the Nobel Prize in Economics in 1973.</p>
+        <SectionCard
+          preHeader='SOCIO ECONOMIC ANALYSIS'
+          header='We are experts at socio-economic analysis based on input-output modelling.'
+          description='Input-output analysis is a type of economic model that describes the interdependent relationships between industrial sectors within an economy. It shows how the outputs of one sector flow into another sector as inputs. Wassily Leontief, who was a Soviet-American economist, developed the input-output analysis method, earning him the Nobel Prize in Economics in 1973.'
+        >
           <MathematicalSymbol />
-        </section>
-        <section className={styles.sectionDescriptionVariant}>
-          <h4 className={styles.preHeader}>community development</h4>
-          <h1 className={styles.header}>
-            We simplify complex questions.
-          </h1>
-          <p className={styles.sectionDescription}>Socio economic analysis is an umbrella term for theories that marry economic factors with impacts on human sociology. At its core, socio-economic analysis uses economic inputs to drive social change. It is a type of analysis that is commonly used to structure community development programs.</p>
+        </SectionCard>
+        <SectionCard
+          variant
+          preHeader='community development'
+          header='We simplify complex questions.'
+          description='Socio economic analysis is an umbrella term for theories that marry economic factors with impacts on human sociology. At its core, socio-economic analysis uses economic inputs to drive social change. It is a type of analysis that is commonly used to structure community development programs.'
+        >
           <Community />
-        </section>
-        <section className={styles.section}>
-          <h4 className={styles.preHeader}>IMPACTS</h4>
-          <h1 className={styles.header}>Kinds of impacts in the input-output analysis.</h1>
-          <p className={styles.sectionDescription}>By quantifying the supply chain in different industries in an economy, input-output analysis can be used to analyze the economic impacts of an initial change in final demand. Impacts may be categorized as follows:</p>
+        </SectionCard>
+        <SectionCard
+          preHeader='IMPACTS'
+          header='Kinds of impacts in the input-output analysis.'
+          description='By quantifying the supply chain in different industries in an economy, input-output analysis can be used to analyze the economic impacts of an initial change in final demand. Impacts may be categorized as follows:'
+        >
 
           <div className={styles.descriptionBox}>
             <h4 className={styles.boxPreHeader}>INITIAL EFFECT</h4>
@@ -81,45 +80,43 @@ const Home: NextPage = () => {
             <h3>INDUCED EFFECT</h3>
             <p>Employment opportunities created by the operation mean increase earnings that are largely spent locally</p>
           </div>
-        </section>
-        <section className={styles.sectionDescriptionVariant}>
-          <h4 className={styles.preHeader}>KEY ATTRIBUTES</h4>
-          <h1 className={styles.header}>Most important characteristics of the Input-output model.</h1>
-          <p className={styles.sectionDescription}>By quantifying the supply chain in different industries in an economy, input-output analysis can be used to analyze the economic impacts of an initial change in final demand. Impacts may be categorized as follows:</p>
-          <div className={styles.iconContainer}>
-            <div className={styles.iconWrapper}>
+        </SectionCard>
+        <SectionCard
+          variant
+          preHeader='KEY ATTRIBUTES'
+          header='Most important characteristics of the Input-output model.'
+          description='By quantifying the supply chain in different industries in an economy, input-output analysis can be used to analyze the economic impacts of an initial change in final demand. Impacts may be categorized as follows:'
+        >
+          <>
+            <SimpleCard
+              header='Integral'
+              description='Input-output analysis describes the interdependent supply chains between sectors within an economy.'
+            >
+
               <IntegralSymbol />
-            </div>
-          </div>
+            </SimpleCard>
+            <SimpleCard
+              header='Estimate'
+              description='Input-output analysis describes the interdependent supply chains between sectors within an economy.'
+            >
 
-          <h5 className={styles.subCategoryTitle}>Integral</h5>
-          <p>Input-output analysis describes the interdependent supply chains between sectors within an economy.</p>
-          <div className={styles.iconContainer}>
-            <div className={styles.iconWrapper}>
               <Estimate />
-            </div>
-          </div>
+            </SimpleCard>
+            <SimpleCard
+              header='Estimate'
+              description='In the input-output analysis model, the global economic impact of an economic event can be analysed on the basis of the initial evolution of demand and its direct, indirect and induced impacts.'
+            >
 
-
-          <h5 className={styles.subCategoryTitle}>Estimate</h5>
-          <p>The input-output analysis toolkit quantifies the output streams from one industry as inputs to another.</p>
-
-          <div className={styles.iconContainer}>
-            <div className={styles.iconWrapper}>
               <Analysis />
-            </div>
-          </div>
-
-
-          <h5 className={styles.subCategoryTitle}>Estimate</h5>
-          <p>In the input-output analysis model, the global economic impact of an economic event can be analysed on the basis of the initial evolution of demand and its direct, indirect and induced impacts.</p>
-        </section>
+            </SimpleCard>
+          </>
+        </SectionCard>
       </main>
 
       <footer className={styles.footer}>
         <div className={styles.footerWrapper}>
           <Link href="/contact" className={styles.contactUsCta}>
-            Get in touch
+            Contact us
           </Link>
           <div className={styles.footerIcons}>
             <LinkedIn />
