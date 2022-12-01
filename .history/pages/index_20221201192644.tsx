@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import Hamburger from 'hamburger-react'
+import type { ReactDOM } from 'react'
+import ReactCSSTransitionGroup from 'react-transition-group';
 
 import Link from 'next/link'
 import Head from "next/head";
@@ -7,11 +8,29 @@ import Image from "next/image";
 
 import type { NextPage } from "next";
 
+import Hamburger from 'hamburger-react'
 
 import { MathematicalSymbol, IntegralSymbol, Estimate, Analysis, Community } from "../components/icons";
-import { Navigation } from "../components/nav/Navigation";
 
 import styles from "../styles/Home.module.css";
+
+const Navigation = () => {
+  return (
+    <nav className={styles.navigation}>
+      <div className={styles.links}>
+        <Link href="/">
+          About
+        </Link>
+        <Link href="/">
+          Contact
+        </Link>
+        <Link href="/">
+          Login
+        </Link>
+      </div>
+    </nav>
+  );
+};
 
 const Home: NextPage = () => {
   const [isOpen, setOpen] = useState(false)
@@ -26,7 +45,18 @@ const Home: NextPage = () => {
       <div className={styles.hamburger}>
         <Hamburger toggled={isOpen} toggle={setOpen} />
       </div>
-     {isOpen &&  <Navigation />}
+      {//@ts-ignore}
+      <ReactCSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          <Navigation key='jkjhkhkjh' />
+        </ReactCSSTransitionGroup>
+
+      {/* {isOpen && (
+      )
+
+      } */}
       <div
         style={{
           width: "100%",
@@ -49,24 +79,24 @@ const Home: NextPage = () => {
         <section className={styles.section}>
           <h4 className={styles.preHeader}>SOCIO ECONOMIC ANALYSIS </h4>
           <h1 className={styles.header}>
-          We are experts at socio-economic analysis based on input-output modelling. 
+            We are experts at socio-economic analysis based on input-output modelling.
           </h1>
           <p className={styles.sectionDescription}>Input-output analysis is a type of economic model that describes the interdependent relationships between industrial sectors within an economy. It shows how the outputs of one sector flow into another sector as inputs. Wassily Leontief, who was a Soviet-American economist, developed the input-output analysis method, earning him the Nobel Prize in Economics in 1973.</p>
-          <MathematicalSymbol/>
+          <MathematicalSymbol />
         </section>
         <section className={styles.sectionDescriptionVariant}>
           <h4 className={styles.preHeader}>community development</h4>
           <h1 className={styles.header}>
-          We simplify complex questions. 
+            We simplify complex questions.
           </h1>
           <p className={styles.sectionDescription}>Socio economic analysis is an umbrella term for theories that marry economic factors with impacts on human sociology. At its core, socio-economic analysis uses economic inputs to drive social change. It is a type of analysis that is commonly used to structure community development programs.</p>
-          <Community/>
+          <Community />
         </section>
         <section className={styles.section}>
           <h4 className={styles.preHeader}>IMPACTS</h4>
           <h1 className={styles.header}>Kinds of impacts in the input-output analysis.</h1>
           <p className={styles.sectionDescription}>By quantifying the supply chain in different industries in an economy, input-output analysis can be used to analyze the economic impacts of an initial change in final demand. Impacts may be categorized as follows:</p>
-          
+
           <div className={styles.descriptionBox}>
             <h4 className={styles.boxPreHeader}>INITIAL EFFECT</h4>
             <h3>DIRECT EFFECT</h3>
@@ -89,7 +119,7 @@ const Home: NextPage = () => {
           <p className={styles.sectionDescription}>By quantifying the supply chain in different industries in an economy, input-output analysis can be used to analyze the economic impacts of an initial change in final demand. Impacts may be categorized as follows:</p>
           <div className={styles.iconContainer}>
             <div className={styles.iconWrapper}>
-            <IntegralSymbol />
+              <IntegralSymbol />
             </div>
           </div>
 

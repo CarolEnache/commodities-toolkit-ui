@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import Hamburger from 'hamburger-react'
+import type { ReactDOM } from 'react'
+import ReactCSSTransitionGroup from 'react-transition-group';
 
 import Link from 'next/link'
 import Head from "next/head";
@@ -7,11 +8,29 @@ import Image from "next/image";
 
 import type { NextPage } from "next";
 
+import Hamburger from 'hamburger-react'
 
 import { MathematicalSymbol, IntegralSymbol, Estimate, Analysis, Community } from "../components/icons";
-import { Navigation } from "../components/nav/Navigation";
 
 import styles from "../styles/Home.module.css";
+
+const Navigation = () => {
+  return (
+    <nav className={styles.navigation}>
+      <div className={styles.links}>
+        <Link href="/">
+          About
+        </Link>
+        <Link href="/">
+          Contact
+        </Link>
+        <Link href="/">
+          Login
+        </Link>
+      </div>
+    </nav>
+  );
+};
 
 const Home: NextPage = () => {
   const [isOpen, setOpen] = useState(false)

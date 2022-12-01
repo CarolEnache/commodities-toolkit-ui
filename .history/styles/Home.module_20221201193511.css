@@ -19,6 +19,7 @@
 }
 
 .navigation {
+
   grid-column-start: 1;
   grid-column-end: 5;
   display: flex;
@@ -159,6 +160,7 @@
 
 .grid {
   grid-column: 1 / 5;
+
   display: flex;
   align-items: center;
   justify-content: center;

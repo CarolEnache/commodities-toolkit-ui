@@ -13,6 +13,8 @@ import { Navigation } from "../components/nav/Navigation";
 
 import styles from "../styles/Home.module.css";
 
+
+
 const Home: NextPage = () => {
   const [isOpen, setOpen] = useState(false)
 
