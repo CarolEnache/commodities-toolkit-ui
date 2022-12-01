@@ -10,8 +10,8 @@ export const Navigation = () => {
         <Link href="/contact">
           Contact
         </Link>
-        <Link href="/">
-          Login
+        <Link href="/about">
+          About
         </Link>
     </nav>
   );

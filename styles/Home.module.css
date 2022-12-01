@@ -121,11 +121,22 @@
   grid-column: 1 / 5;
 
   display: flex;
-  flex: 1;
   padding: 2rem 0;
-  border-top: 1px solid #eaeaea;
   justify-content: center;
   align-items: center;
+}
+
+.footerWrapper {
+  max-width: 50%;
+
+}
+
+.footerIcons {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 16px;
+
 }
 
 .footer a {
