@@ -37,74 +37,80 @@ const schema = yup.object({
 
 const ContactPage = () => {
   const [isOpen, setOpen] = useState(false)
+  const [isSubmitted, setSubmitted] = useState(false)
 
   const { register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
     resolver: yupResolver(schema)
   });
-  const onSubmit = (data: IFormInputs) => console.log(data);
+  const onSubmit = (data: IFormInputs) => {
+    setSubmitted(true)
+    console.log(data)
+  };
 
   return (
     <>
-      <div>
-        <Hamburger toggled={isOpen} toggle={setOpen} />
-      </div>
-      {isOpen && <Navigation />}
-      <h1>Contact</h1>       
-      <p>Send us a message!</p>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor='first-name'>
-          First name
-          <input id='first-name'{...register("firstName")} />
-        </label>
-        <p className={styles.error}>{errors.firstName?.message}</p>
+      {!isSubmitted ? <>
+        <div>
+          <Hamburger toggled={isOpen} toggle={setOpen} />
+        </div>
+        {isOpen && <Navigation />}
+        <h1>Contact</h1>       
+        <p>Send us a message!</p>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <label htmlFor='first-name'>
+            First name
+            <input id='first-name'{...register("firstName")} />
+          </label>
+          <p className={styles.error}>{errors.firstName?.message}</p>
 
-        <label htmlFor='last-name'>
-          Last name
-          <input id='last-name'{...register("lastName")} />
-        </label>
-        <p className={styles.error}>{errors.lastName?.message}</p>
+          <label htmlFor='last-name'>
+            Last name
+            <input id='last-name'{...register("lastName")} />
+          </label>
+          <p className={styles.error}>{errors.lastName?.message}</p>
 
-        <label htmlFor='email'>
-          Email
-          <input id='email'{...register("email")} />
-        </label>
-        <p className={styles.error}>{errors.email?.message}</p>
+          <label htmlFor='email'>
+            Email
+            <input id='email'{...register("email")} />
+          </label>
+          <p className={styles.error}>{errors.email?.message}</p>
 
-        <label htmlFor='phone'>
-          Phone /  Mobile
-          <input id='phone'{...register("phoneNumber")} />
-        </label>
-        <p className={styles.error}>{errors.phoneNumber?.message}</p>
+          <label htmlFor='phone'>
+            Phone /  Mobile
+            <input id='phone'{...register("phoneNumber")} />
+          </label>
+          <p className={styles.error}>{errors.phoneNumber?.message}</p>
 
-        <label htmlFor='region'>
-          Country / Region
-          <input id='region'{...register("region")} />
-        </label>
+          <label htmlFor='region'>
+            Country / Region
+            <input id='region'{...register("region")} />
+          </label>
 
-        <label htmlFor='profession'>
-          Your profession
-          <input id='profession'{...register("profession")} />
-        </label>
-        <p className={styles.error}>{errors.profession?.message}</p>
+          <label htmlFor='profession'>
+            Your profession
+            <input id='profession'{...register("profession")} />
+          </label>
+          <p className={styles.error}>{errors.profession?.message}</p>
 
-        <label htmlFor='company'>
-          Company
-          <input id='first-name'{...register("company")} />
-        </label>
+          <label htmlFor='company'>
+            Company
+            <input id='first-name'{...register("company")} />
+          </label>
 
-        <label htmlFor='job-description'>
-          Job Description
-          <input id='job-description'{...register("jobDescription")} />
-        </label>
+          <label htmlFor='job-description'>
+            Job Description
+            <input id='job-description'{...register("jobDescription")} />
+          </label>
 
-        <label htmlFor='message'>
-          Message
-          <textarea id='message'{...register("message")} />
-        </label>
-        <p className={styles.error}>{errors.firstName?.message}</p>
+          <label htmlFor='message'>
+            Message
+            <textarea id='message'{...register("message")} />
+          </label>
+          <p className={styles.error}>{errors.firstName?.message}</p>
 
-        <input type="submit" />
-      </form>
+          <input type="submit" />
+        </form>
+      </> : <h1>Thank you</h1>}
     </>
   );
 }
