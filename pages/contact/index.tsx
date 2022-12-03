@@ -9,6 +9,8 @@ import Hamburger from 'hamburger-react'
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Navigation } from '../../components/nav/Navigation';
+
+import styles from './Contact.module.css'
 interface IFormInputs {
   firstName: string
   lastName: string
@@ -54,25 +56,25 @@ const ContactPage = () => {
           First name
           <input id='first-name'{...register("firstName")} />
         </label>
-        <p>{errors.firstName?.message}</p>
+        <p className={styles.error}>{errors.firstName?.message}</p>
 
         <label htmlFor='last-name'>
           Last name
           <input id='last-name'{...register("lastName")} />
         </label>
-        <p>{errors.lastName?.message}</p>
+        <p className={styles.error}>{errors.lastName?.message}</p>
 
         <label htmlFor='email'>
           Email
           <input id='email'{...register("email")} />
         </label>
-        <p>{errors.email?.message}</p>
+        <p className={styles.error}>{errors.email?.message}</p>
 
         <label htmlFor='phone'>
           Phone /  Mobile
           <input id='phone'{...register("phoneNumber")} />
         </label>
-        <p>{errors.phoneNumber?.message}</p>
+        <p className={styles.error}>{errors.phoneNumber?.message}</p>
 
         <label htmlFor='region'>
           Country / Region
@@ -83,7 +85,7 @@ const ContactPage = () => {
           Your profession
           <input id='profession'{...register("profession")} />
         </label>
-        <p>{errors.profession?.message}</p>
+        <p className={styles.error}>{errors.profession?.message}</p>
 
         <label htmlFor='company'>
           Company
@@ -99,7 +101,7 @@ const ContactPage = () => {
           Message
           <textarea id='message'{...register("message")} />
         </label>
-        <p>{errors.firstName?.message}</p>
+        <p className={styles.error}>{errors.firstName?.message}</p>
 
         <input type="submit" />
       </form>
