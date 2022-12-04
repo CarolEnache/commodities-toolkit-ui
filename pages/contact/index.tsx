@@ -50,6 +50,7 @@ const ContactPage = () => {
   return (
     // @ts-ignore
     <div className={globalStyles.container}>
+      {/* @ts-ignore */}
       <main className={globalStyles.main}>
 
         {!isSubmitted ? <>
