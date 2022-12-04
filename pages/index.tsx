@@ -2,14 +2,12 @@ import { useState } from 'react'
 import Hamburger from 'hamburger-react'
 
 import Link from 'next/link'
-import Head from "next/head";
 import type { NextPage } from "next";
 
-
-import { MathematicalSymbol, IntegralSymbol, Estimate, Analysis, Community, Facebook, Twitter, LinkedIn } from "../components/icons";
+import { MathematicalSymbol, IntegralSymbol, Estimate, Analysis, Community } from "../components/svgs";
 import { Navigation } from "../components/nav/Navigation";
-import { SectionCard } from "../components/cards/section-card/SectionCard";
-import { SimpleCard } from "../components/cards/simple-card/SimpleCard";
+import { SectionCard, SimpleCard, DescriptionCard } from "../components/cards";
+import Footer  from "../components/footer";
 
 import styles from "../styles/Home.module.css";
 
@@ -59,22 +57,21 @@ const Home: NextPage = () => {
           header='Kinds of impacts in the input-output analysis.'
           description='By quantifying the supply chain in different industries in an economy, input-output analysis can be used to analyze the economic impacts of an initial change in final demand. Impacts may be categorized as follows:'
         >
-
-          <div className={styles.descriptionBox}>
-            <h4 className={styles.boxPreHeader}>INITIAL EFFECT</h4>
-            <h3>DIRECT EFFECT</h3>
-            <p>Goods, consumables and services purchased directly by the mining operation or project</p>
-          </div>
-          <div className={styles.descriptionBox}>
-            <h4 className={styles.boxPreHeader}>FIRST ROUND <span>&</span> INDUSTRIAL SUPPORT</h4>
-            <h3>INDIRECT EFFECT</h3>
-            <p>Suppliers of steel, cement, etc. will themselves trigger further demand for energy, chemicals transport, etc</p>
-          </div>
-          <div className={styles.descriptionBox}>
-            <h4 className={styles.boxPreHeader}>INCOME EFFECT</h4>
-            <h3>INDUCED EFFECT</h3>
-            <p>Employment opportunities created by the operation mean increase earnings that are largely spent locally</p>
-          </div>
+          <DescriptionCard
+            preHeader='INITIAL EFFECT'
+            header='DIRECT EFFECT'
+            description='Goods, consumables and services purchased directly by the mining operation or project'
+          />
+          <DescriptionCard
+            preHeader={`FIRST ROUND ${<span>&</span>} INDUSTRIAL SUPPORT`}
+            header='INDIRECT EFFECT'
+            description='Suppliers of steel, cement, etc. will themselves trigger further demand for energy, chemicals transport, etc'
+          />
+          <DescriptionCard
+            preHeader='INCOME EFFECT'
+            header='INDUCED EFFECT'
+            description='Employment opportunities created by the operation mean increase earnings that are largely spent locally'
+          />
         </SectionCard>
         <SectionCard
           variant
@@ -107,19 +104,7 @@ const Home: NextPage = () => {
           </>
         </SectionCard>
       </main>
-
-      <footer className={styles.footer}>
-        <div className={styles.footerWrapper}>
-          <Link href="/contact" className={styles.contactUsCta}>
-            Contact us
-          </Link>
-          <div className={styles.footerIcons}>
-            <LinkedIn />
-            <Twitter />
-            <Facebook />
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

@@ -1,0 +1,15 @@
+
+
+.descriptionBox {
+  background-color: var(--secondary);
+  color: var(--white);
+  padding: 1rem;
+  margin: 1rem;
+}
+
+.boxPreHeader {
+  font-size: 16px;
+  font-weight: 200;
+  color: var(--white);
+  margin: 1rem 0;
+}

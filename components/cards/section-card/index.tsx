@@ -9,7 +9,7 @@ type SectionCardProps = {
   variant?: boolean
 }
 
-export const SectionCard = ({ preHeader, header, description, children, variant }: SectionCardProps) => {
+const SectionCard = ({ preHeader, header, description, children, variant }: SectionCardProps) => {
   const variantClass = variant ? styles.sectionDescriptionVariant : styles.section
   return (
     <section className={variantClass}>
@@ -22,3 +22,5 @@ export const SectionCard = ({ preHeader, header, description, children, variant 
     </section>
   )
 }
+
+export default SectionCard;

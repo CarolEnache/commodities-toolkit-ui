@@ -1,7 +1,3 @@
-
-
-
-
 import { useState } from 'react'
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -11,6 +7,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Navigation } from '../../components/nav/Navigation';
 
 import styles from './Contact.module.css'
+
+import * as globalStyles from '../../styles/Home.module.css'
+
 interface IFormInputs {
   firstName: string
   lastName: string
@@ -47,71 +46,75 @@ const ContactPage = () => {
     console.log(data)
   };
 
+  
   return (
-    <>
-      {!isSubmitted ? <>
-        <div>
-          <Hamburger toggled={isOpen} toggle={setOpen} />
-        </div>
-        {isOpen && <Navigation />}
-        <h1>Contact</h1>       
-        <p>Send us a message!</p>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor='first-name'>
-            First name
-            <input id='first-name'{...register("firstName")} />
-          </label>
-          <p className={styles.error}>{errors.firstName?.message}</p>
+    // @ts-ignore
+    <div className={globalStyles.container}>
+      <main className={globalStyles.main}>
 
-          <label htmlFor='last-name'>
-            Last name
-            <input id='last-name'{...register("lastName")} />
-          </label>
-          <p className={styles.error}>{errors.lastName?.message}</p>
+        {!isSubmitted ? <>
+          <div>
+            <Hamburger toggled={isOpen} toggle={setOpen} />
+          </div>
+          {isOpen && <Navigation />}
+          <h1 className={styles.pageTitle}>Contact us</h1>       
+          <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+            <label className={styles.formField} htmlFor='first-name'>
+              First name <span className={styles.required}>*</span>
+              <input id='first-name'{...register("firstName")} />
+            </label>
+            { errors.firstName && <p className={styles.error}>{errors.firstName?.message}</p>}
 
-          <label htmlFor='email'>
-            Email
-            <input id='email'{...register("email")} />
-          </label>
-          <p className={styles.error}>{errors.email?.message}</p>
+            <label className={styles.formField} htmlFor='last-name'>
+              Last name  <span className={styles.required}>*</span>
+              <input id='last-name'{...register("lastName")} />
+            </label>
+            {errors.lastName && <p className={styles.error}>{errors.lastName?.message}</p>}
 
-          <label htmlFor='phone'>
-            Phone /  Mobile
-            <input id='phone'{...register("phoneNumber")} />
-          </label>
-          <p className={styles.error}>{errors.phoneNumber?.message}</p>
+            <label className={styles.formField} htmlFor='email'>
+              Email  <span className={styles.required}>*</span>
+              <input id='email'{...register("email")} />
+            </label>
+            { errors.email && <p className={styles.error}>{errors.email?.message}</p>}
 
-          <label htmlFor='region'>
-            Country / Region
-            <input id='region'{...register("region")} />
-          </label>
+            <label className={styles.formField} htmlFor='phone'>
+              Phone /  Mobile
+              <input id='phone'{...register("phoneNumber")} />
+            </label>
+            {errors.phoneNumber && <p className={styles.error}>{errors.phoneNumber?.message}</p>}
 
-          <label htmlFor='profession'>
-            Your profession
-            <input id='profession'{...register("profession")} />
-          </label>
-          <p className={styles.error}>{errors.profession?.message}</p>
+            <label className={styles.formField} htmlFor='region'>
+              Country / Region
+              <input id='region'{...register("region")} />
+            </label>
 
-          <label htmlFor='company'>
-            Company
-            <input id='first-name'{...register("company")} />
-          </label>
+            <label className={styles.formField} htmlFor='profession'>
+              Your profession  <span className={styles.required}>*</span>
+              <input id='profession'{...register("profession")} />
+            </label>
+            {errors.profession && <p className={styles.error}>{errors.profession?.message}</p>}
 
-          <label htmlFor='job-description'>
-            Job Description
-            <input id='job-description'{...register("jobDescription")} />
-          </label>
+            <label className={styles.formField} htmlFor='company'>
+              Company
+              <input id='first-name'{...register("company")} />
+            </label>
 
-          <label htmlFor='message'>
-            Message
-            <textarea id='message'{...register("message")} />
-          </label>
-          <p className={styles.error}>{errors.firstName?.message}</p>
+            <label className={styles.formField} htmlFor='job-description'>
+              Job Description
+              <input id='job-description'{...register("jobDescription")} />
+            </label>
 
-          <input type="submit" />
-        </form>
-      </> : <h1>Thank you</h1>}
-    </>
+            <label className={styles.formField} htmlFor='message'>
+              Message  <span className={styles.required}>*</span>
+              <textarea id='message'{...register("message")} />
+            </label>
+            { errors.message && <p className={styles.error}>{errors.message?.message}</p>}
+
+            <input type="submit" className={styles.submitButton} />
+          </form>
+        </> : <h1>Thank you</h1>}
+      </main>
+    </div>
   );
 }
 

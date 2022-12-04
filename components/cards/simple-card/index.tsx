@@ -8,9 +8,9 @@ type SimpleCardProps = {
   variant?: boolean
 }
 
-export const SimpleCard = ({ header, description, children }: SimpleCardProps) => {
+const SimpleCard = ({ header, description, children }: SimpleCardProps) => {
 
-  return (
+return (
     <>
       <div className={styles.iconContainer}>
         <div className={styles.iconWrapper}>
@@ -22,3 +22,5 @@ export const SimpleCard = ({ header, description, children }: SimpleCardProps) =
     </>
   )
 }
+
+export default SimpleCard;

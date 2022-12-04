@@ -1,3 +1,97 @@
 .error {
   color: red;
+  margin-top: 0;
+}
+
+.pageTitle {
+  grid-column: 1/5;
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 0.8;
+  margin: 1rem 0;
+  color: var(--cosmosBlue);
+  font-size: 53px;
+  margin: 0;
+}
+
+.form {
+  grid-column: 1/5;
+}
+
+.formField {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  display: block;
+  color: var(--compassBlue);
+}
+
+.formField input {
+  display: inline-block;
+  width: 90%;
+  max-width: 500px;
+  height: 40px;
+  padding: 9px 10px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 22px;
+  border: 1px solid #cbd6e2;
+  box-sizing: border-box;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  border-radius: 3px;
+  margin: 4px 0 18px 0;
+  width: 100%;
+  background-color: var(--whiteSolid);
+}
+
+.formField textarea {
+  display: inline-block;
+  width: 90%;
+  max-width: 500px;
+  height: 80px;
+  padding: 9px 10px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 22px;
+  border: 1px solid #cbd6e2;
+  box-sizing: border-box;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  border-radius: 3px;
+  margin: 4px 0 18px 0;
+  width: 100%;
+  background-color: var(--whiteSolid);
+}
+
+
+.required {
+  color: red;
+}
+
+.submitButton {
+  color: #ffffff;
+  font-size: 15px;
+  line-height: 15px;
+  margin: 0;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 700;
+  line-height: 12px;
+  position: relative;
+  text-align: center;
+  transition: all .15s linear;
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+  color: #fff;
+  border-radius: 3px;
+  border-style: solid;
+  border-width: 1px;
+  font-size: 14px;
+  padding: 12px 24px;
+  font-weight: 700;
 }
