@@ -55,7 +55,7 @@ const ContactPage = () => {
 
         {!isSubmitted ? <>
           <div>
-            <Hamburger toggled={isOpen} toggle={setOpen} />
+            <Hamburger color='#012d49' toggled={isOpen} toggle={setOpen} />
           </div>
           {isOpen && <Navigation />}
           <h1 className={styles.pageTitle}>Contact us</h1>       

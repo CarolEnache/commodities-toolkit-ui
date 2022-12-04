@@ -17,7 +17,7 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.hamburger}>
-        <Hamburger toggled={isOpen} toggle={setOpen} />
+        <Hamburger color='#012d49' toggled={isOpen} toggle={setOpen} />
       </div>
       {isOpen && <Navigation />}
       <div
