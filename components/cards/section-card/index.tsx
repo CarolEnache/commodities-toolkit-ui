@@ -1,23 +1,34 @@
 import type { ReactNode } from 'react'
-import styles from './SectionCard.module.css'
+import cn from "classnames";
+
+import styles from './SectionCard.module.scss'
+
+type descriptionItem = {
+  paragraph: string;
+}
 
 type SectionCardProps = {
   preHeader: string;
   header: string;
-  description: string;
-  children: ReactNode;
-  variant?: boolean
+  description?: descriptionItem[]
+  children?: ReactNode;
+  variant?: boolean;
+  center?: boolean;
 }
 
-const SectionCard = ({ preHeader, header, description, children, variant }: SectionCardProps) => {
-  const variantClass = variant ? styles.sectionDescriptionVariant : styles.section
+const SectionCard = ({ preHeader, header, description, children, variant, center }: SectionCardProps) => {
   return (
-    <section className={variantClass}>
+    <section className={cn(styles.sectionDescription, {[styles['sectionDescription--variant']]: variant}, {[styles['sectionDescription--center']]: center})}>
       <h4 className={styles.preHeader}>{preHeader} </h4>
       <h1 className={styles.header}>
         {header}
       </h1>
-      <p className={styles.sectionDescription}>{description}</p>
+      {description?.map((item, index) => {
+        return (
+          <p key={index} className={styles.sectionDescription}>{item.paragraph}</p>
+        )
+      })
+      }
       {children}
     </section>
   )

@@ -30,21 +30,20 @@
   font-weight: 100;
 }
 
-.sectionDescriptionVariant {
-  grid-column: 1/5;
-  margin: 1rem 0;
-  line-height: 22.5px;
-  font-size: 15px;
-  font-weight: 100;
-  background-color: var(--tertiary);
-  padding: 1rem;
-  margin: -1rem;
-}
-
 .sectionDescription {
   grid-column: 1/5;
   margin: 1rem 0;
   line-height: 22.5px;
   font-size: 15px;
   font-weight: 100;
+
+  &--variant {
+    background-color: var(--tertiary);
+    padding: 1rem;
+    margin: -1rem;
+  }
+
+  &--center {
+    text-align: center;
+  }
 }

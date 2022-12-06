@@ -1,0 +1,11 @@
+.imageWrapper {
+  border-radius: 50%;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: space-between;
+  margin: 8rem 0 5rem 0;
+}

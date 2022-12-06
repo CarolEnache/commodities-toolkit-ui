@@ -19,7 +19,6 @@
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(4, 1fr);
-
   grid-column: 1 / 5;
   min-height: 100vh;
   padding: 0 1rem;

@@ -16,9 +16,7 @@ interface IFormInputs {
   email: string
   phoneNumber: string
   region: string
-  profession: string
   company: string
-  jobDescription: string
   message: string
 }
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
@@ -28,9 +26,7 @@ const schema = yup.object({
   lastName: yup.string().required('Last name is required'),
   email: yup.string().email().required('Email is required'),
   phoneNumber: yup.string().matches(phoneRegExp, 'The phone number is not valid'),
-  profession: yup.string().required('Please enter your profession'),
   company: yup.string(),
-  jobDescription: yup.string(),
   message: yup.string().required('Please complete this required field'),
 }).required();
 
@@ -89,20 +85,9 @@ const ContactPage = () => {
               <input id='region'{...register("region")} />
             </label>
 
-            <label className={styles.formField} htmlFor='profession'>
-              Your profession  <span className={styles.required}>*</span>
-              <input id='profession'{...register("profession")} />
-            </label>
-            {errors.profession && <p className={styles.error}>{errors.profession?.message}</p>}
-
             <label className={styles.formField} htmlFor='company'>
               Company
               <input id='first-name'{...register("company")} />
-            </label>
-
-            <label className={styles.formField} htmlFor='job-description'>
-              Job Description
-              <input id='job-description'{...register("jobDescription")} />
             </label>
 
             <label className={styles.formField} htmlFor='message'>
