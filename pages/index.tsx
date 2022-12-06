@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Hamburger from 'hamburger-react'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import type { NextPage } from "next";
 
 import { MathematicalSymbol, IntegralSymbol, Estimate, Analysis, Community } from "../components/svgs";
@@ -20,16 +21,8 @@ const Home: NextPage = () => {
         <Hamburger color='#012d49' toggled={isOpen} toggle={setOpen} />
       </div>
       {isOpen && <Navigation />}
-      <div
-        style={{
-          width: "100%",
-          height: "25rem",
-          backgroundImage: "url(/hero.png)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          gridColumn: "1 / -1",
-        }}
-      >
+      <div  className={styles.hello}>
+        <Image src='/hero.png' layout='fill' alt={''} />
       </div>
 
       <Link href="/contact" className={styles.contactUsCta}>
