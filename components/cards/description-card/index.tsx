@@ -1,4 +1,4 @@
-import styles from './DescriptionCard.module.css'
+import styles from './DescriptionCard.module.scss'
 
 type DescriptionCardProps = {
   preHeader: string;

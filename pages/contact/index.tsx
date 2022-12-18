@@ -6,9 +6,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Navigation } from '../../components/nav/Navigation';
 
-import styles from './Contact.module.css'
+import styles from './Contact.module.scss'
 
-import * as globalStyles from '../../styles/Home.module.css'
+import * as globalStyles from '../../styles/Home.module.scss'
 
 interface IFormInputs {
   firstName: string

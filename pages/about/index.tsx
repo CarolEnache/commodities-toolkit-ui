@@ -7,8 +7,8 @@ import { Navigation } from '../../components/nav/Navigation';
 import SectionCard from '../../components/cards/section-card'
 import Footer from '../../components/footer';
 
-import * as globalStyles from '../../styles/Home.module.css'
-import styles from './About.module.css'
+import * as globalStyles from '../../styles/Home.module.scss'
+import styles from './About.module.scss'
 
 const About = () => {
   const [isOpen, setOpen] = useState(false)

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import styles from './SimpleCard.module.css'
+import styles from './SimpleCard.module.scss'
 
 type SimpleCardProps = {
   header: string;

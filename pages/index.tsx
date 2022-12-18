@@ -10,7 +10,7 @@ import { Navigation } from "../components/nav/Navigation";
 import { SectionCard, SimpleCard, DescriptionCard } from "../components/cards";
 import Footer from "../components/footer";
 
-import styles from "../styles/Home.module.css";
+import styles from "../styles/Home.module.scss";
 
 const Home: NextPage = () => {
   const [isOpen, setOpen] = useState(false)
@@ -18,10 +18,11 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.hamburger}>
-        <Hamburger color='#012d49' toggled={isOpen} toggle={setOpen} />
+          <Hamburger color='#012d49' toggled={isOpen} toggle={setOpen} />
       </div>
       {isOpen && <Navigation />}
-      <div  className={styles.hello}>
+
+      <div className={styles.hello}>
         <Image src='/hero.png' layout='fill' alt={''} />
       </div>
 

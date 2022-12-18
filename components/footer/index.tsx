@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Facebook, Twitter, LinkedIn } from '../svgs';
-import styles from './Footer.module.css';
+import styles from './Footer.module.scss';
 
  const Footer = () => (
   <footer className={styles.footer}>
