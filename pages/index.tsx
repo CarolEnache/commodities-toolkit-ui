@@ -34,7 +34,7 @@ const Home: NextPage = () => {
         <SectionCard
           preHeader='SOCIO ECONOMIC ANALYSIS'
           header='We are experts at socio-economic analysis based on input-output modelling.'
-          description={[{ paragraph: 'Input-output analysis is a type of economic model that describes the interdependent relationships between industrial sectors within an economy. It shows how the outputs of one sector flow into another sector as inputs. Wassily Leontief, who was a Soviet-American economist, developed the input-output analysis method, earning him the Nobel Prize in Economics in 1973.' }]}
+          description={[{ paragraph: 'Input-output analysis is a type of economic model that describes the interdependent relationships between industrial sectors within an economy. It shows how the outputs of one sector flow into another sector as inputs. Wassily Leontief, who was a Soviet-American economist, developed the input-output analysis method, earning him the Nobel Prize in Economics in 1973.' }, { paragraph: 'Input-output analysis is a type of economic model that describes the interdependent relationships between industrial sectors within an economy. It shows how the outputs of one sector flow into another sector as inputs. Wassily Leontief, who was a Soviet-American economist, developed the input-output analysis method, earning him the Nobel Prize in Economics in 1973.' }]}
           svg={<MathematicalSymbol />}
         />
         <SectionCard
@@ -46,21 +46,21 @@ const Home: NextPage = () => {
         >
           <>
             <SimpleCard
-              header='Integral'
-              description='Input-output analysis describes the interdependent supply chains between sectors within an economy.'
+              header='Integral Integral Integral'
+              description='Input-output analysis describes the interdependent supply chains between sectors within an economy. Input-output analysis describes the interdependent supply chains between sectors within an economy. Input-output analysis describes the interdependent supply chains between sectors within an economy.'
             >
 
               <IntegralSymbol />
             </SimpleCard>
             <SimpleCard
-              header='Estimate'
-              description='Input-output analysis describes the interdependent supply chains between sectors within an economy.'
+              header='Estimate Estimate'
+              description='Input-output analysis describes the interdependent supply chains between sectors within an economy. Input-output analysis describes the interdependent supply chains between sectors within an economy.'
             >
 
               <Estimate />
             </SimpleCard>
             <SimpleCard
-              header='Estimate'
+              header=' Analysis Analysis Analysis Analysis Analysis'
               description='In the input-output analysis model, the global economic impact of an economic event can be analysed on the basis of the initial evolution of demand and its direct, indirect and induced impacts.'
             >
 
@@ -71,7 +71,7 @@ const Home: NextPage = () => {
         <SectionCard
           preHeader='community development'
           header='We simplify complex questions.'
-          description={[{ paragraph: 'Socio economic analysis is an umbrella term for theories that marry economic factors with impacts on human sociology. At its core, socio-economic analysis uses economic inputs to drive social change. It is a type of analysis that is commonly used to structure community development programs.' }]}
+          description={[{ paragraph: 'Socio economic analysis is an umbrella term for theories that marry economic factors with impacts on human sociology. At its core, socio-economic analysis uses economic inputs to drive social change. It is a type of analysis that is commonly used to structure community development programs.' }, { paragraph: 'Socio economic analysis is an umbrella term for theories that marry economic factors with impacts on human sociology. At its core, socio-economic analysis uses economic inputs to drive social change. It is a type of analysis that is commonly used to structure community development programs.' }, { paragraph: 'Socio economic analysis is an umbrella term for theories that marry economic factors with impacts on human sociology. At its core, socio-economic analysis uses economic inputs to drive social change. It is a type of analysis that is commonly used to structure community development programs.' }]}
           svg={<Community />}
         />
 
