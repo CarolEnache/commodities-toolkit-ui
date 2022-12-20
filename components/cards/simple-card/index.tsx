@@ -11,7 +11,7 @@ type SimpleCardProps = {
 const SimpleCard = ({ header, description, children }: SimpleCardProps) => {
 
 return (
-    <>
+    <div className={styles.simpleCard}>
       <div className={styles.iconContainer}>
         <div className={styles.iconWrapper}>
           {children}
@@ -19,7 +19,7 @@ return (
       </div>
       <h5 className={styles.subCategoryTitle}>{header}</h5>
       <p>{description}</p>
-    </>
+    </div>
   )
 }
 

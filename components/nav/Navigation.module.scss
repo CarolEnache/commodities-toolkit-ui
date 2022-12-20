@@ -5,5 +5,35 @@
   flex-direction: column;
   gap: 16px;
   padding: 16px;
-  color: black;
+  color: var(--secondary);
+
+  @media (min-width: 992px) {
+    gap: 16px;
+    padding: 16px;
+    color: var(--secondary);
+    display: flex;
+    flex-direction: row;
+    grid-column: 5 / 10;
+    justify-content: space-evenly;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+  }
+}
+.navItem {
+  height: 100%;
+  margin-top: 30px;
+  position: relative;
+
+  &:hover:after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    background-color: var(--secondary);
+    transition: width 0.3s;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    }
 }

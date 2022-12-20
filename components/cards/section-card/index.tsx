@@ -14,27 +14,29 @@ type SectionCardProps = {
   children?: ReactNode;
   variant?: boolean;
   center?: boolean;
+  wideChildren?: boolean;
+  svg?: ReactNode;
+  desktopOnlySVG?: ReactNode;
 }
 
-const SectionCard = ({ preHeader, header, description, children, variant, center }: SectionCardProps) => {
+const SectionCard = ({ preHeader, header, description, children, variant, center, svg, desktopOnlySVG }: SectionCardProps) => {
   return (
-    <section className={cn(styles.sectionDescription, { [styles['sectionDescription--variant']]: variant }, { [styles['sectionDescription--center']]: center })}>
-      <div className={cn(styles.sectionContainer, { [styles['sectionContainer--variant']]: variant })}>
-        <div className={styles.sectionElement}>
-          <h4 className={styles.preHeader}>{preHeader} </h4>
-          <h1 className={styles.header}>
-            {header}
-          </h1>
-          {description?.map((item, index) => {
-            return (
-              <p key={index} className={styles.sectionDescription}>{item.paragraph}</p>
-            )
-          })
-          }
-        </div>
-        <div className={styles.sectionElement}>
-          {children}
-        </div>
+    <section className={cn(styles.sectionCard, { [styles['sectionCard--variant']]: variant }, { [styles['sectionCard--center']]: center })}>
+      <h4 className={cn(styles.preHeader, { [styles['preHeader--variant']]: variant }, { [styles['preHeader--center']]: center })}>
+        {preHeader}
+      </h4>
+      <h1 className={cn(styles.header, { [styles['header--variant']]: variant }, { [styles['header--center']]: center })}>
+        {header}
+      </h1>
+      {description?.map((item, index) => {
+        return (
+          <p key={index} className={cn(styles.description, { [styles['description--variant']]: variant }, { [styles['description--center']]: center })}> {item.paragraph}</p>
+        )
+      })
+      }
+      {svg && <div className={cn(styles.svg, { [styles['svg--desktopOnlySVG']]: desktopOnlySVG }, { [styles['svg--variant']]: variant })}>{svg}</div>}
+      <div className={styles.children}>
+        {children}
       </div>
     </section>
   )

@@ -4,13 +4,16 @@ import styles from './Navigation.module.scss';
 export const Navigation = () => {
   return (
     <nav className={styles.navigation}>
-        <Link href="/">
+        <Link href="/" className={styles.navItem}>
           Home
         </Link>
-        <Link href="/contact">
+        <Link href="/" className={styles.navItem}>
+          Our Solution
+        </Link>
+        <Link href="/contact" className={styles.navItem}>
           Contact
         </Link>
-        <Link href="/about">
+        <Link href="/about" className={styles.navItem}>
           About
         </Link>
     </nav>
