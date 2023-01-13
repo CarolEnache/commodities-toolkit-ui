@@ -117,10 +117,14 @@
 
 .svg {
   grid-column: 1/5;
+  height: 400px;
+  ;
 
   &--desktopOnlySVG {
     display: none;
     @media (min-width: 992px) {
+      height: inherit;
+
       display: block;
       grid-column: 7/11;
       grid-row: 1 / 5 ;
@@ -129,6 +133,8 @@
 
 
   @media (min-width: 992px) {
+    height: inherit;
+
     grid-column: 7/11;
     grid-row: 1 / 8;
 

@@ -34,7 +34,15 @@ const SectionCard = ({ preHeader, header, description, children, variant, center
         )
       })
       }
-      {svg && <div className={cn(styles.svg, { [styles['svg--desktopOnlySVG']]: desktopOnlySVG }, { [styles['svg--variant']]: variant })}>{svg}</div>}
+      {svg && ( 
+        <div
+          style={{ 
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundImage: `url(${svg})`
+          }}
+          className={cn(styles.svg, { [styles['svg--desktopOnlySVG']]: desktopOnlySVG }, { [styles['svg--variant']]: variant })}></div>
+        )}
       <div className={styles.children}>
         {children}
       </div>
