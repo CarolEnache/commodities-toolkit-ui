@@ -4,7 +4,6 @@ import Hamburger from 'hamburger-react'
 import Link from 'next/link'
 import type { NextPage } from "next";
 
-import { MathematicalSymbol, IntegralSymbol, Estimate, Analysis, Community } from "../components/svgs";
 import { Navigation } from "../components/nav/Navigation";
 import { SectionCard, SimpleCard, DescriptionCard } from "../components/cards";
 import Footer from "../components/footer";
