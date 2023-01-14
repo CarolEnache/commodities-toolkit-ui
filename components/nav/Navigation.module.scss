@@ -1,8 +1,8 @@
-
 .hamburger {
   position: relative;
   margin-top: 1rem;
   width: 100%;
+
   @media (min-width: 992px) {
     display: none;
   }
@@ -34,17 +34,19 @@
   margin-top: 30px;
   position: relative;
 
-  &:hover:after {
-    content: "";
-    display: block;
-    width: 0;
-    height: 2px;
-    background-color: var(--secondary);
-    transition: width 0.3s;
-    position: absolute;
-    width: 100%;
-    bottom: 0;
+  @media (min-width: 992px) {
+    &:hover:after {
+      content: "";
+      display: block;
+      width: 0;
+      height: 2px;
+      background-color: var(--secondary);
+      transition: width 0.3s;
+      position: absolute;
+      width: 100%;
+      bottom: 0;
     }
+  }
 }
 
 .contactUsCta {
