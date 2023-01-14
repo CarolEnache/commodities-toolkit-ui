@@ -8,7 +8,6 @@ type SimpleCardProps = {
   variant?: boolean
 }
 
-// const svg = '/automated.svg'
 
 const SimpleCard = ({ header, description, svg }: SimpleCardProps) => {
 
@@ -16,7 +15,6 @@ return (
     <div className={styles.simpleCard}>
       <div className={styles.iconContainer}>
         <div className={styles.iconWrapper}>
-          {/* {children} */}
           <div         
           style={{ 
             backgroundSize: 'cover',

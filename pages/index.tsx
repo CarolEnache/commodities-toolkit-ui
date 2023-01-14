@@ -7,13 +7,13 @@ import type { NextPage } from "next";
 import { Navigation } from "../components/nav/Navigation";
 import { SectionCard, SimpleCard, DescriptionCard } from "../components/cards";
 import Footer from "../components/footer";
-
+import { useBreakpoints } from "../hooks/breakpoints";
 import styles from "../styles/Home.module.scss";
 
 const Home: NextPage = () => {
   const [isOpen, setOpen] = useState(false)
-
-  return (
+  const isDesktop = useBreakpoints()
+    return (
     <div className={styles.container}>
       <div className={styles.hamburger}>
         <Hamburger color='#012d49' toggled={isOpen} toggle={setOpen} direction='right' />
@@ -22,7 +22,9 @@ const Home: NextPage = () => {
 
 
       <main className={styles.main}>
-        <Navigation />
+        <>
+        {isDesktop && <Navigation />}
+        </>
         <div className={styles.contactUsCta}>
           <Link href="/contact" >
             Contact us
