@@ -7,11 +7,10 @@ import Footer from "../components/footer";
 import styles from "../styles/Home.module.scss";
 
 const Home: NextPage = () => {
-  const [isOpen, setOpen] = useState(false)
-  console.log('home', isOpen)
+  const [toggleBurger, setOpen] = useState(false)
   return (
     <div className={styles.container}>
-      <Menu isOpen={isOpen} setOpen={setOpen}/>
+      <Menu toggleBurger={toggleBurger} setOpen={setOpen}/>
       <main className={styles.main}>
         <SectionCard
           preHeader='Impact Assessment Modelling'

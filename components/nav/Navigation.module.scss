@@ -1,20 +1,8 @@
-.navigation {
-  grid-column-start: 1;
-  grid-column-end: 5;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 16px;
-}
 
 .hamburger {
   position: relative;
-  // position: absolute;
-  // top: 0;
-  // right: 0;
-  // background-color: white;
+  margin-top: 1rem;
   width: 100%;
-
   @media (min-width: 992px) {
     display: none;
   }
@@ -27,18 +15,15 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 16px;
   color: var(--secondary);
 
   @media (min-width: 992px) {
     gap: 16px;
-    padding: 16px;
     color: var(--secondary);
     display: flex;
     flex-direction: row;
-    grid-column: 5 / 10;
-    justify-content: space-evenly;
-    align-items: center;
+    grid-column: 6 / 11;
+    justify-content: space-between;
     font-size: 15px;
     font-weight: 600;
   }
@@ -63,30 +48,31 @@
 }
 
 .contactUsCta {
-  display: none;
+  display: block;
+  grid-column-start: 8/10;
+  grid-column: 10/ 11;
+  padding: 1rem 2rem;
+  font-family: "Inter", Sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 1px solid var(--primary);
+  max-width: 9rem;
+  height: 45px;
+  width: 152px;
+  display: flex;
+  align-items: center;
+  background: var(--secondary);
+  color: white;
+  margin-top: 30px;
+  margin-top: 30px;
 
   @media (min-width: 992px) {
-    display: block;
-    grid-column-start: 8/10;
-    grid-column: 10/ 11;
-    padding: 1rem 2rem;
-    font-family: "Inter", Sans-serif;
-    font-size: 1rem;
-    font-weight: 500;
-    border: 1px solid var(--primary);
-    border-radius: 30px 30px 30px 30px;
     margin: 1rem;
-    max-width: 9rem;
-    height: 45px;
-    width: 152px;
-    display: flex;
-    align-items: center;
-    background: var(--secondary);
-    color: white;
+    border-radius: 30px 30px 30px 30px;
+
 
     &:hover {
       background: var(--primary);
-      // color: var(--secondary);
     }
   }
 }
@@ -96,7 +82,6 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-column: 1 / 5;
-  // min-height: 100vh;
   padding: 0 1rem;
   gap: 16px;
 

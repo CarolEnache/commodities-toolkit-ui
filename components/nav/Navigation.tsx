@@ -10,11 +10,11 @@ export const Navigation = () => {
         <Link href="/" className={styles.navItem}>
           Our Solution
         </Link>
-        <Link href="/contact" className={styles.navItem}>
-          Contact
-        </Link>
         <Link href="/about" className={styles.navItem}>
           About
+        </Link>
+        <Link href="/contact" className={styles.contactUsCta }>
+          Contact
         </Link>
     </nav>
   );
