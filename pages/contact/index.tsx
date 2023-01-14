@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import Hamburger from 'hamburger-react'
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Navigation } from '../../components/nav/Navigation';
+import { Menu } from "../../components/nav/Menu";
+
 
 import styles from './Contact.module.scss'
 
@@ -42,25 +43,26 @@ const ContactPage = () => {
     console.log(data)
   };
 
-  
+
   return (
     // @ts-ignore
     <div className={globalStyles.container}>
+      <Menu isOpen={isOpen} setOpen={setOpen}/>
+
+
+      {isOpen && <Navigation />}
       {/* @ts-ignore */}
       <main className={globalStyles.main}>
 
         {!isSubmitted ? <>
-          <div>
-            <Hamburger color='#012d49' toggled={isOpen} toggle={setOpen} />
-          </div>
-          {isOpen && <Navigation />}
-          <h1 className={styles.pageTitle}>Contact us</h1>       
+
+          <h1 className={styles.pageTitle}>Contact us</h1>
           <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
             <label className={styles.formField} htmlFor='first-name'>
               First name <span className={styles.required}>*</span>
               <input id='first-name'{...register("firstName")} />
             </label>
-            { errors.firstName && <p className={styles.error}>{errors.firstName?.message}</p>}
+            {errors.firstName && <p className={styles.error}>{errors.firstName?.message}</p>}
 
             <label className={styles.formField} htmlFor='last-name'>
               Last name  <span className={styles.required}>*</span>
@@ -72,7 +74,7 @@ const ContactPage = () => {
               Email  <span className={styles.required}>*</span>
               <input id='email'{...register("email")} />
             </label>
-            { errors.email && <p className={styles.error}>{errors.email?.message}</p>}
+            {errors.email && <p className={styles.error}>{errors.email?.message}</p>}
 
             <label className={styles.formField} htmlFor='phone'>
               Phone /  Mobile
@@ -94,7 +96,7 @@ const ContactPage = () => {
               Message  <span className={styles.required}>*</span>
               <textarea id='message'{...register("message")} />
             </label>
-            { errors.message && <p className={styles.error}>{errors.message?.message}</p>}
+            {errors.message && <p className={styles.error}>{errors.message?.message}</p>}
 
             <input type="submit" className={styles.submitButton} />
           </form>

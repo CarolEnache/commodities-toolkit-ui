@@ -1,38 +1,20 @@
 import { useState } from 'react'
-import Hamburger from 'hamburger-react'
-
-import Link from 'next/link'
 import type { NextPage } from "next";
 
-import { Navigation } from "../components/nav/Navigation";
+import { Menu } from "../components/nav/Menu";
 import { SectionCard, SimpleCard, DescriptionCard } from "../components/cards";
 import Footer from "../components/footer";
-import { useBreakpoints } from "../hooks/breakpoints";
 import styles from "../styles/Home.module.scss";
 
 const Home: NextPage = () => {
   const [isOpen, setOpen] = useState(false)
-  const isDesktop = useBreakpoints()
-    return (
+  console.log('home', isOpen)
+  return (
     <div className={styles.container}>
-      <div className={styles.hamburger}>
-        <Hamburger color='#012d49' toggled={isOpen} toggle={setOpen} direction='right' />
-        {isOpen && <Navigation />}
-      </div>
-
-
+      <Menu isOpen={isOpen} setOpen={setOpen}/>
       <main className={styles.main}>
-        <>
-        {isDesktop && <Navigation />}
-        </>
-        <div className={styles.contactUsCta}>
-          <Link href="/contact" >
-            Contact us
-          </Link>
-        </div>
-
         <SectionCard
-          preHeader='Economic Impact Assessment Modelling'
+          preHeader='Impact Assessment Modelling'
           header='SEA Modelling as an Economic Impact Assessment Tool'
           description={[{
             paragraph: 'We built the first Socio Economic Analysis model that provides insights in the economic impact for a any commodity. It displays the interactive connections between various sectors and addresses their input and output factors, measuring the value add.'
