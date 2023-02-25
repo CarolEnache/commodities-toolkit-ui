@@ -3,7 +3,7 @@ import Matrix from "./mathjsMatrix";
 // import leontief from "./leontief";
 import { OECD_UNUSED_SECTOR_TO, OECD_UNUSED_SECTOR_FROM } from "../constants";
 import { REGIONS } from "./auxiliary";
-import { Row, Table, } from "./types";
+import { CellValue, Row, Table, } from "./types";
 
 enum OECDRawTitles {
   VAR,
@@ -91,20 +91,29 @@ export const oecdCoeficients = ({ selectedRegion = REGIONS.GLOBAL } = {}) => {
   const oecdDirectRequirements: Record<string, Matrix> = {};
   Object.values(OECDRawVariables).forEach((VAR) => {
     if (!oecdDirectRequirements[VAR]) {
-      oecdDirectRequirements[VAR] = new Matrix(oecdInputs[VAR]);
+      oecdDirectRequirements[VAR] = new Matrix(); // CHANGED: Removed the starting value of oecdInputs
     }
 
-    const industryMatrix = oecdDirectRequirements[VAR];
-
-    industryMatrix.cols.forEach((col) => {
+    oecdInputs[VAR].cols.forEach((col) => {
       const totalValue = oecdInputs[OECDRawVariables.TOTAL].getValueByName('VALU', col);
       const totalOutput = oecdInputs[OECDRawVariables.TOTAL].getValueByName('OUTPUT', col);
 
-      industryMatrix.rows.forEach((row) => {
+      oecdInputs[VAR].rows.filter(rowName => {
+        if (VAR !== OECDRawVariables.VALUE_ADDED && OECD_UNUSED_SECTOR_FROM.includes(rowName)) {
+          return false; // We remove the unused rows here
+        }
+
+        if (VAR === OECDRawVariables.DOMESTIC && rowName.match(/^IMP_/)) {
+          return false; // We remove the IMP in DOMIMP
+        }
+
+        return true;
+      }).forEach((row) => { // CHANGED: Added filter for rows
+        const previous = oecdInputs[VAR].getValueByName(row, col);
         if (VAR === OECDRawVariables.VALUE_ADDED && row === 'VALU') {
-          industryMatrix.setValueByName(row, col, (previous) => Math.min(Number(previous), Number(totalValue)) / Number(totalOutput)); // Querky totalValue
+          oecdDirectRequirements[VAR].setValueByName(row, col, Math.min(Number(previous), Number(totalValue)) / Number(totalOutput)); // Querky totalValue
         } else {
-          industryMatrix.setValueByName(row, col, (previous) => Number(previous) / Number(totalOutput));
+          oecdDirectRequirements[VAR].setValueByName(row, col, Number(previous) / Number(totalOutput));
         }
       });
 
@@ -112,35 +121,56 @@ export const oecdCoeficients = ({ selectedRegion = REGIONS.GLOBAL } = {}) => {
       if (VAR === OECDRawVariables.VALUE_ADDED) {
         const TXS_INT_FNL = oecdInputs[OECDRawVariables.TOTAL].getValueByName('TXS_INT_FNL', col);
         const TXS_IMP_FNL = oecdInputs[OECDRawVariables.TOTAL].getValueByName('TXS_IMP_FNL', col);
-        industryMatrix.setValueByName('TXS_INT_FNL', col, (Number(TXS_INT_FNL) + Number(TXS_IMP_FNL)) / Number(totalOutput));
-        industryMatrix.setValueByName('TTL_INT_FNL', col, oecdInputs[OECDRawVariables.TOTAL].getValueByName('TTL_INT_FNL', col));
-        industryMatrix.setValueByName('Domestic intermediates', col, 
-          oecdDirectRequirements[OECDRawVariables.DOMESTIC].getColAsArrayByName(col, {
-            excludes: OECD_UNUSED_SECTOR_FROM
-          }).reduce((sum, each) => Number(sum) + Number(each), 0)
-        );
-        // industryMatrix.setValueByName('Imported intermediates', col, 
-        //   oecdDirectRequirements[OECDRawVariables.DOMESTIC].getColAsArrayByName(col).reduce()
-        // );
-        // industryMatrix.setValueByName('Employees', col, );
+        const TTL_INT_FNL = oecdInputs[OECDRawVariables.TOTAL].getValueByName('TTL_INT_FNL', col);
+        const row92 = Number(TTL_INT_FNL) / Number(totalOutput);
+        const row93 = oecdDirectRequirements[OECDRawVariables.DOMESTIC].getColAsArrayByName(col).reduce((sum, each) => Number(sum) + Number(each), 0);
+        oecdDirectRequirements[VAR].setValueByName('TXS_INT_FNL', col, (Number(TXS_INT_FNL) + Number(TXS_IMP_FNL)) / Number(totalOutput));
+        oecdDirectRequirements[VAR].setValueByName('TTL_INT_FNL', col, row92);
+        oecdDirectRequirements[VAR].setValueByName('Domestic intermediates', col, row93);
+        oecdDirectRequirements[VAR].setValueByName('Imported intermediates', col, row92 - Number(row93));
+        oecdDirectRequirements[VAR].setValueByName('Employees', col, 0); // TODO: To really calculate them
       }
     });
   });
 
   return {
-    TOTrows: oecdDirectRequirements[OECDRawVariables.TOTAL].rows,
-    DOMrows: oecdDirectRequirements[OECDRawVariables.DOMESTIC].rows,
-    colD01T03: oecdDirectRequirements[OECDRawVariables.DOMESTIC].getColAsArrayByName('D01T03', {
-      excludes: OECD_UNUSED_SECTOR_FROM
-    }),
+    TOTrows: oecdDirectRequirements[OECDRawVariables.TOTAL].rows.length,
+    DOMrows: oecdDirectRequirements[OECDRawVariables.DOMESTIC].rows.length,
+    'Domestic intermediates': {
+      D01T03: [oecdDirectRequirements[OECDRawVariables.VALUE_ADDED].getValueByName('Domestic intermediates', 'D01T03'),   0.4177632 ],
+      D07T08: [oecdDirectRequirements[OECDRawVariables.VALUE_ADDED].getValueByName('Domestic intermediates', 'D07T08'),   0.4545871  ],
+      D13T15: [oecdDirectRequirements[OECDRawVariables.VALUE_ADDED].getValueByName('Domestic intermediates', 'D13T15'),   0.6058234 ],
+    },
+    VALUE_ADDED: {
+      D01T03: {
+        'TXS_INT_FNL': oecdDirectRequirements[OECDRawVariables.VALUE_ADDED].getValueByName('TXS_INT_FNL', 'D01T03'),
+        'TTL_INT_FNL': oecdDirectRequirements[OECDRawVariables.VALUE_ADDED].getValueByName('TTL_INT_FNL', 'D01T03'),
+        'Domestic intermediates': oecdDirectRequirements[OECDRawVariables.VALUE_ADDED].getValueByName('Domestic intermediates', 'D01T03'),
+        'Imported intermediates': oecdDirectRequirements[OECDRawVariables.VALUE_ADDED].getValueByName('Imported intermediates', 'D01T03'),
+        'Value added': oecdDirectRequirements[OECDRawVariables.VALUE_ADDED].getValueByName('VALU', 'D01T03'),
+        'Taxes on production': oecdDirectRequirements[OECDRawVariables.VALUE_ADDED].getValueByName('OTXS', 'D01T03'),
+        'Labour cost': oecdDirectRequirements[OECDRawVariables.VALUE_ADDED].getValueByName('LABR', 'D01T03'),
+        'Operating surplus, gross': oecdDirectRequirements[OECDRawVariables.VALUE_ADDED].getValueByName('GOPS', 'D01T03'),
+      },
+    },
+    D01T03: {
+      DOM_01T03: [oecdDirectRequirements[OECDRawVariables.DOMESTIC].getValueByName('DOM_01T03', 'D01T03'), 0.15281070],
+      DOM_05T06: [oecdDirectRequirements[OECDRawVariables.DOMESTIC].getValueByName('DOM_05T06', 'D01T03'), 0.00153314],
+      DOM_07T08: [oecdDirectRequirements[OECDRawVariables.DOMESTIC].getValueByName('DOM_07T08', 'D01T03'), 0.00063531],
+      DOM_09: [oecdDirectRequirements[OECDRawVariables.DOMESTIC].getValueByName('DOM_09', 'D01T03'), 0.00322329],
+      DOM_10T12: [oecdDirectRequirements[OECDRawVariables.DOMESTIC].getValueByName('DOM_10T12', 'D01T03'), 0.07258892],
+      DOM_13T15: [oecdDirectRequirements[OECDRawVariables.DOMESTIC].getValueByName('DOM_13T15', 'D01T03'), 0.00246866],
+      DOM_16: [oecdDirectRequirements[OECDRawVariables.DOMESTIC].getValueByName('DOM_16', 'D01T03'), 0.00111496],
+      DOM_17T18: [oecdDirectRequirements[OECDRawVariables.DOMESTIC].getValueByName('DOM_17T18', 'D01T03'), 0.00149865],
+      DOM_19: [oecdDirectRequirements[OECDRawVariables.DOMESTIC].getValueByName('DOM_19', 'D01T03'), 0.02013333],
+      DOM_20T21: [oecdDirectRequirements[OECDRawVariables.DOMESTIC].getValueByName('DOM_20T21', 'D01T03'), 0.02634719],
+      DOM_22: [oecdDirectRequirements[OECDRawVariables.DOMESTIC].getValueByName('DOM_22', 'D01T03'), 0.00273352],
+      DOM_23: [oecdDirectRequirements[OECDRawVariables.DOMESTIC].getValueByName('DOM_23', 'D01T03'), 0.00149588],
+      DOM_24: [oecdDirectRequirements[OECDRawVariables.DOMESTIC].getValueByName('DOM_24', 'D01T03'), 0.00075564],
+      DOM_25: [oecdDirectRequirements[OECDRawVariables.DOMESTIC].getValueByName('DOM_25', 'D01T03'), 0.00265580],
+    }
   };
 
-  const test = oecdDirectRequirements[OECDRawVariables.VALUE_ADDED];
-  return {
-    D01T03: [test.getValueByName('Domestic intermediates', 'D01T03'),   0.4177632 ],
-    D07T08: [test.getValueByName('Domestic intermediates', 'D07T08'),   0.4545871  ],
-    D13T15: [test.getValueByName('Domestic intermediates', 'D13T15'),   0.6058234 ],
-  };
   return oecdDirectRequirements;
 
 

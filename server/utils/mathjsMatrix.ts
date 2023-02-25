@@ -20,20 +20,12 @@ class Matrix {
     return index;
   }
 
-  getColAsArray(colIndex: MatrixIndex, options: { excludes: RowName[] }): CellValue[] {
-    return this.matrix.filter((row, rowIndex) => {
-      const rowName = this.rows[rowIndex];
-
-      if (options?.excludes && options.excludes.includes(rowName)) {
-        return false;
-      }
-      
-      return true;
-    }).map(row => row[colIndex]);
+  getColAsArray(colIndex: MatrixIndex): CellValue[] {
+    return this.matrix.map(row => row[colIndex]);
   }
 
-  getColAsArrayByName(col: ColumnName, options: { excludes: RowName[] }): CellValue[] {
-    return this.getColAsArray(this.getCol(col), options);
+  getColAsArrayByName(col: ColumnName): CellValue[] {
+    return this.getColAsArray(this.getCol(col));
   }
 
   getRow(row: RowName): MatrixIndex {
