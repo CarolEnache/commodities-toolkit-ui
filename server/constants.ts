@@ -1,5 +1,5 @@
 // For the Leontief calculation, these columns and rows are excluded
-export const OECD_UNUSED_COLS = [
+export const OECD_UNUSED_SECTOR_TO = [
   // 'HFCE',
   "NPISH",
   "GGFC",
@@ -12,7 +12,7 @@ export const OECD_UNUSED_COLS = [
   "TOTAL",
 ];
 // For the Leontief calculation, these columns and rows are excluded
-export const OECD_UNUSED_ROWS = [
+export const OECD_UNUSED_SECTOR_FROM: string[] = [
   "OUTPUT",
   "VALU",
   "TXS_IMP_FNL",

@@ -1,13 +1,69 @@
-/**
- * Review of the previous table-matrix.mjs
- */
-import { MathCollection } from "mathjs";
+import { ArgValue, ColumnName, MatrixIndex, RowName, Table, CellValue } from "./types";
 
 class Matrix {
-  cols: string[] = []; // Column labels, for searching/debugging
-  rows: string[] = []; // Row labels, for searching/debugging
+  cols: ColumnName[]; // Column labels, for searching/debugging | A,B,C,D
+  rows: RowName[]; // Row labels, for searching/debugging | 1,2,3,4
+  matrix: Table; // This is an array of arrays to be used in mathjs
 
-  matrix: MathCollection = []; // This is an array of arrays to be used in mathjs
+  constructor(matrix ?: Matrix) {
+    this.cols = matrix?.cols ? structuredClone(matrix.cols) as ColumnName[] : [];
+    this.rows = matrix?.rows ? structuredClone(matrix.rows) as RowName[] : [];
+    this.matrix = matrix?.matrix ? structuredClone(matrix.matrix) as Table : [[]];
+  }
+
+  getCol(col: ColumnName): MatrixIndex {
+    let index = this.cols.indexOf(col); // We search the col title
+    if (index === -1) { // If not found we add it
+      index = this.cols.length;
+      this.cols.push(col);
+    }
+    return index;
+  }
+
+  getColAsArray(colIndex: MatrixIndex, options: { excludes: RowName[] }): CellValue[] {
+    return this.matrix.filter((row, rowIndex) => {
+      const rowName = this.rows[rowIndex];
+
+      if (options?.excludes && options.excludes.includes(rowName)) {
+        return false;
+      }
+      
+      return true;
+    }).map(row => row[colIndex]);
+  }
+
+  getColAsArrayByName(col: ColumnName, options: { excludes: RowName[] }): CellValue[] {
+    return this.getColAsArray(this.getCol(col), options);
+  }
+
+  getRow(row: RowName): MatrixIndex {
+    let index = this.rows.indexOf(row); // We search the row title
+    if (index === -1) { // If not found we add it
+      index = this.rows.length;
+      this.rows.push(row);
+    }
+    return index;
+  }
+
+  setValue(rowIndex: MatrixIndex, colIndex: MatrixIndex, value: ArgValue) { 
+    const outputMatrix = this.matrix;
+    if (!outputMatrix[rowIndex]) {
+      outputMatrix[rowIndex] = [];
+    }
+    outputMatrix[rowIndex][colIndex] = typeof value === 'function' ? value(outputMatrix[rowIndex][colIndex] || 0) : value;
+  }
+
+  setValueByName(row: RowName, col: ColumnName, value: ArgValue) {
+    this.setValue(this.getRow(row), this.getCol(col), value);
+  }
+
+  getValue(rowIndex: MatrixIndex, colIndex: MatrixIndex) {
+    return this.matrix[rowIndex][colIndex];
+  }
+
+  getValueByName(row: RowName, col: ColumnName) {
+    return this.getValue(this.getRow(row), this.getCol(col));
+  }
 }
 
 export default Matrix;

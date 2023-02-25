@@ -1,10 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { oecdCoeficients, Table } from '../../server/utils/oecdCoeficients';
+import { oecdCoeficients } from '../../server/utils/oecdCoeficients';
 
 export default function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Table>
+  res: NextApiResponse
 ) {
   res.status(200).json(oecdCoeficients());
 }

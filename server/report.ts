@@ -19,8 +19,8 @@ SS_Use ❌ Unused / Hidden
 STST_FU ❌ Unused / Hidden
 Scrap_Ratios ❌ Unused / Hidden
 Auxiliary ✅ Constants / Config
-Co_MSR_Raw_Data 📓
-Co_MSR ✅ Columns are renamed from Co_MSR_Raw_Data; Summed then  filtered
+❌ Co_MSR_Raw_Data 📓
+❌ Co_MSR ✅ Columns are renamed from Co_MSR_Raw_Data; Summed then  filtered
     # of companies                                = Establishments
     Production (kt)                               = Production (kt)
     Co-related USD$ ml/t Revenue                  = Output
@@ -28,13 +28,13 @@ Co_MSR ✅ Columns are renamed from Co_MSR_Raw_Data; Summed then  filtered
     Employment Cost USD$ ml                       = Wages and salaries
     R&D Expenditure (Expansion Capex, $USD ml)    = R&D
     Co-Related Value Added USD$ ml                = Value Added
-Co_End_Use_Distribution 📓✅ Takes (Year, First use, product), calcs %per 1stUse+Year, plans forecast
-Co_End_Use 📓✅ Takes (First Use, Region, Year), matches with Co_End_Use_Distribution;
-    Calcs "Value addition at first use" which "Cobalt value used" decides if it's used... something like 1+(X/(1-X))
-    Calcs the cobalt price * multiplier for End Uses
-Co_First_Use_Distribution 📓✅ Takes (product, year) data, calcs %per year, plans forecast (tons of usage)
-Co_First_Use 📓✅ Takes (country, year) data, matches with Co_First_Use_Distribution; Average per year per region; Calculates cobalt price (3 scenarios)
-Co_Recycling 🧧 
+❌ Co_End_Use_Distribution 📓✅ Takes (Year, First use, product), calcs %per 1stUse+Year, plans forecast
+❌ Co_End_Use 📓✅ Takes (First Use, Region, Year), matches with Co_End_Use_Distribution;
+❌     Calcs "Value addition at first use" which "Cobalt value used" decides if it's used... something like 1+(X/(1-X))
+❌     Calcs the cobalt price * multiplier for End Uses
+❌ Co_First_Use_Distribution 📓✅ Takes (product, year) data, calcs %per year, plans forecast (tons of usage)
+❌ Co_First_Use 📓✅ Takes (country, year) data, matches with Co_First_Use_Distribution; Average per year per region; Calculates cobalt price (3 scenarios)
+❌ Co_Recycling 🧧 
 Cobalt prices 📓
 OECD Employment 📓
 OECD Income 📓
@@ -42,25 +42,25 @@ OECD Raw IO 📓
 OECD pivot ✅ Pivot from OECD Raw IO
 OECD inputs ✅ Filter & aggregate from OECD pivot
 OECD Direct Requirements ✅ Normalising OECD inputs
-OECD Direct Requirements (Coeficients) ✅ Totals / Values ; Then take that % and do a matrix multiplaction with the industry matrix
+❌ OECD Direct Requirements (Coeficients) ✅ Totals / Values ; Then take that % and do a matrix multiplaction with the industry matrix
 OECD Identity Matrix ✅ Identity Matrix
 OECD I-A ✅ Identity Matrix - OECD Direct Requirements
 OECD Type I ✅ Leontief without Labour, using OECD I-A
 OECD Type II ✅ Leontief with Labour, using OECD I-A
-OECD Coefficients 🧧 List of coeficients, from Type I, Tpye II and OECD Direct Requirements
+❌ OECD Coefficients 🧧 List of coeficients, from Type I, Tpye II and OECD Direct Requirements
 UNIDO_MINSTAT_REV_4 📓
 UNIDO - RECYCLING REV 3.1 📓
 UNIDO 📓
-UNIDO 2 - Employees ✅ Pivot from UNIDO
-UNIDO 2 - Establishments ✅ Pivot from UNIDO
-UNIDO 2 - Output ✅ Pivot from UNIDO
-UNIDO 2 - Value added ✅ Pivot from UNIDO
-UNIDO 2 - Wages and salaries ✅ Pivot from UNIDO
-(1) ✅ Pivot from Establishments
-(11) ✅ Pivot from Employees
-(3) ✅ Pivot from value added
-(5) ✅ Pivot from wages and salaries
-(9) ✅ Pivot from Output
+❌ UNIDO 2 - Employees ✅ Pivot from UNIDO
+❌ UNIDO 2 - Establishments ✅ Pivot from UNIDO
+❌ UNIDO 2 - Output ✅ Pivot from UNIDO
+❌ UNIDO 2 - Value added ✅ Pivot from UNIDO
+❌ UNIDO 2 - Wages and salaries ✅ Pivot from UNIDO
+❌ ❌ (1) ✅ Pivot from Establishments
+❌ ❌ (11) ✅ Pivot from Employees
+❌ ❌ (3) ✅ Pivot from value added
+❌ ❌ (5) ✅ Pivot from wages and salaries
+❌ ❌ (9) ✅ Pivot from Output
 Roskill_IOModel ❌ Clone, unneeded
 Roskill_IOModel_PIVOT 🔥
 Footprint - Sectoral analysis 🔥
@@ -68,7 +68,7 @@ Report 👀 End User Report
 */
 
 // Cover 👀: This is the data that will come from the form
-const formData = {
+export const formData = {
   asset_model: 'COBALT',
   asset_market: 'COBALT',
   asset_modes_value: 'Base product value + value addition',
