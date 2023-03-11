@@ -89,9 +89,16 @@ export const oecdCoeficients = ({ selectedRegion = REGIONS.GLOBAL } = {}) => {
   const oecdInputs = getOECDInputs(OECDRawData);
 
   const oecdDirectRequirements: { [P in OECDRawVariables]?: Matrix } = {};
+  /**
+   * This is a matrix with just the industry rows and columns, to be able to calculate the types
+   */
+  const oecdTypePrimitive: { [P in OECDRawVariables]?: Matrix } = {};
   Object.values(OECDRawVariables).forEach((VAR) => {
     if (!oecdDirectRequirements[VAR]) {
       oecdDirectRequirements[VAR] = new Matrix(); // CHANGED: Removed the starting value of oecdInputs
+      if (VAR !== OECDRawVariables.VALUE_ADDED) { // ADDED: Started with the matrix for the next step
+        oecdTypePrimitive[VAR] = new Matrix();
+      }
     }
 
     oecdInputs[VAR].cols.forEach((col) => {
@@ -110,10 +117,16 @@ export const oecdCoeficients = ({ selectedRegion = REGIONS.GLOBAL } = {}) => {
         return true;
       }).forEach((row) => { // CHANGED: Added filter for rows
         const previous = oecdInputs[VAR].getValueByName(row, col);
+        let value;
         if (VAR === OECDRawVariables.VALUE_ADDED && row === 'VALU') {
-          oecdDirectRequirements[VAR]?.setValueByName(row, col, Math.min(Number(previous), Number(totalValue)) / Number(totalOutput)); // Querky totalValue
+          value = Math.min(Number(previous), Number(totalValue)) / Number(totalOutput); // Querky totalValue
         } else {
-          oecdDirectRequirements[VAR]?.setValueByName(row, col, Number(previous) / Number(totalOutput));
+          value = Number(previous) / Number(totalOutput);
+        }
+        oecdDirectRequirements[VAR]?.setValueByName(row, col, value);
+
+        if (VAR !== OECDRawVariables.VALUE_ADDED) { // DOUBT: Any extra filtering?
+          oecdTypePrimitive[VAR]?.setValueByName(row, col, value);
         }
       });
 
@@ -226,30 +239,16 @@ export const oecdCoeficients = ({ selectedRegion = REGIONS.GLOBAL } = {}) => {
   //       },
   //     };
 
-  //     const roundMatrix = (matrix) => {
-  //       return matrix.map((oRow) => {
-  //         return oRow.map((oCol) => {
-  //           return Math.round((oCol + Number.EPSILON) * 1e5) / 1e5;
-  //         });
-  //       });
-  //     };
-
-  //     const typeI = {
-  //       TOTAL: roundMatrix(leontief.closed(oecdTypeI.TTL.matrix)),
-  //       DOMESTIC: roundMatrix(leontief.closed(oecdTypeI.DOMIMP.matrix)),
-  //     };
-  //     const typeII = {
-  //       TOTAL: roundMatrix(leontief.closed(oecdTypeII.TTL.matrix)),
-  //       DOMESTIC: roundMatrix(leontief.closed(oecdTypeII.DOMIMP.matrix)),
-  //     };
-
-  //     // const newReportName = `reports/oecd_${
-  //     //   new Date().toISOString().split('T')[0]
-  //     // }_${crypto.randomUUID()}.json`;
-  //     // console.log(newReportName);
-  //     // userStorage.write(
-  //     //   newReportName,
-  //     //   { DR: oecdTypePrimitive, typeI, typeII }
-  //     // );
+  return {
+    DirectRequirements: oecdDirectRequirements,
+    typeI: {
+      TOTAL: null, // leontief.closed(oecdTypeI.TTL.matrix)
+      DOMESTIC: null, // leontief.closed(oecdTypeI.DOMIMP.matrix)
+    },
+    typeII: {
+      TOTAL: null, // leontief.closed(oecdTypeII.TTL.matrix)
+      DOMESTIC: null, // leontief.closed(oecdTypeII.DOMIMP.matrix)
+    }
+  };
   // >>>>>>> To Review
 };
