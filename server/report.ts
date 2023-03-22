@@ -1,7 +1,7 @@
 // So let's start from the data
 // To import data we use the app storage
 // import storage from './utils/dataStorage';
-// import { OECD } from './utils/oecd';
+import { oecdCoeficients } from './utils/oecdCoeficients';
 
 /**
  *  Tables in the spreadsheet
@@ -83,7 +83,7 @@ export const formData = {
   economy_unido_start: 2010,
   economy_unido_end: 2021,
   economy_oecd: 'OECD/2015',
-  economy_region: 'North America', // 'Global',
+  economy_region: 'Global', // 'North America',
   // report_id: crypto.randomUUID(),
   report_compiler: 'Socio-Economic Analysis Toolkit',
   report_org: 'Cobalt Institute',
@@ -92,10 +92,10 @@ export const formData = {
 };
 
 // And we have a utils that calculates the OECD stuff
-// const OECD = OECD.calculate({
-//   region: formData.economy_region,
+const OECD = oecdCoeficients({
+  selectedRegion: formData.economy_region,
 //   source: formData.economy_oecd,
-// });
+});
 //// Breakdown of the OECD: Raw data, Convert Rows to Table (PIVOT), Filter & aggregate (INPUT), Normalise (Direct Requirements)
 //// At direct requirements, build coeficients stuff which are the values / totals, then a matrix multiplication 
 //// Apply leontief, using the type I and II build the coeficients page
