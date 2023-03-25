@@ -21,8 +21,6 @@ const filterByRegion = (selectedRegion: string) => (row: Row) => {
     return false;
   }
   // CODE-00002: We moved the row filtering to the way we create the oecdTypePrimitive
-  //   return false;
-  // }
   // Filter by region if it's not Global
   if (selectedRegion && selectedRegion !== REGIONS.GLOBAL) {
     // And it's not the selected region
@@ -69,13 +67,14 @@ const getOECDInputs = (OECDRawData: Table) => {
    */
   const sortedOecdInputs: OECDVariableSheet = {};
   const variables = Object.keys(oecdInputs) as OECDRawVariables[];
-  let colReference = oecdInputs[variables[2]]?.cols || [];
   variables.forEach((VAR) => {
     const input = oecdInputs[VAR] as Matrix; // Developers say: It's always defined Typescript :joy:
+    const colReference = (input.cols || []).sort((a,b) => a > b ? 1 : -1);
+    const rowReference = (input.rows || []).sort((a,b) => a > b ? 1 : -1);
     sortedOecdInputs[VAR] = new Matrix({
       cols: colReference,
-      rows: input.rows,
-      matrix: input.rows.map(row => colReference.map(col => input.getValueByName(row, col)))
+      rows: rowReference,
+      matrix: rowReference.map(row => colReference.map(col => input.getValueByName(row, col)))
     } as Matrix);
   });
 
@@ -104,6 +103,9 @@ const getOECDDirectRequirements = ({ oecdInputs, selectedRegion }: { oecdInputs:
         'VALU',
         col
       );
+      if (totalValue === 0) {
+        console.log('totalValue col', VAR, col);
+      }
       let totalOutput: number = 0;
       if (col === 'HFCE') {
         /**
@@ -114,6 +116,9 @@ const getOECDDirectRequirements = ({ oecdInputs, selectedRegion }: { oecdInputs:
         totalOutput = Number(
           oecdInputs[OECDRawVariables.TOTAL]?.getValueByName('OUTPUT', col)
         );
+      }
+      if (totalOutput === 0) {
+        console.log('totalOutput col', VAR, col);
       }
 
       oecdInputs[VAR]?.rows
@@ -270,17 +275,16 @@ const getOECDTypes = (
   return {
     oecdTypeI: {
       TOTAL: new Matrix({
-        cols: oecdTypeI.TTL?.cols,
-        rows: oecdTypeI.TTL?.rows,
-        matrix: leontief(oecdTypeI.TTL?.matrix as number[][]),
+        cols: oecdTypeI[OECDRawVariables.TOTAL]?.cols,
+        rows: oecdTypeI[OECDRawVariables.TOTAL]?.rows,
+        matrix: leontief(oecdTypeI[OECDRawVariables.TOTAL]?.matrix as number[][]),
       } as Matrix),
       DOMESTIC: new Matrix({
-        cols: oecdTypeI.TTL?.cols,
-        rows: oecdTypeI.TTL?.rows,
-        matrix: leontief(oecdTypeI.DOMIMP?.matrix as number[][]),
+        cols: oecdTypeI[OECDRawVariables.DOMESTIC]?.cols,
+        rows: oecdTypeI[OECDRawVariables.DOMESTIC]?.rows,
+        matrix: leontief(oecdTypeI[OECDRawVariables.DOMESTIC]?.matrix as number[][]),
       } as Matrix),
     },
-    // oecdTypeII,
     oecdTypeII: {
       TOTAL: new Matrix({
         cols: oecdTypeII.TTL?.cols,
@@ -306,7 +310,8 @@ export const oecdCoeficients = ({ selectedRegion = REGIONS.GLOBAL } = {}) => {
 
   return {
     oecdInputs,
-    // DirectRequirements: oecdDirectRequirements, // ✅
+    DirectRequirements: oecdDirectRequirements, // ✅
+    // oecdTypePrimitive,
     // typeI: oecdTypeI, // ✅
     /**
      * BUG: Type II is not returning the same value as the spreadsheet
