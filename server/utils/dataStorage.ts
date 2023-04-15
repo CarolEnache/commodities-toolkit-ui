@@ -2,9 +2,11 @@
 import OECDRawPart0 from '../../data/OECD/2015/OECDRawIO.part0.json'
 import OECDRawPart1 from '../../data/OECD/2015/OECDRawIO.part1.json'
 import OECDRawPart2 from '../../data/OECD/2015/OECDRawIO.part2.json'
+import OECDEmploymentPart0 from '../../data/OECD/2015/OECDEmployment.part0.json'
 
 
-export const OECDRawInputOutput = [].concat(OECDRawPart0 as []).concat(OECDRawPart1 as []).concat(OECDRawPart2 as [])
+export const OECDRawInputOutput = [].concat(OECDRawPart0 as []).concat(OECDRawPart1 as []).concat(OECDRawPart2 as []);
+export const OECDEmployment = [].concat(OECDEmploymentPart0 as []);
 // export const OECDRawInputOutput = [
 //   ["VAR","Variable","COU","Country","Region","ROW","From: (sector in row)","COL","To: (sector in column)","TIME","Time","Unit Code","Unit","PowerCode Code","PowerCode","Reference Period Code","Reference Period","Value","Flag Codes","Flags"],
 //   ["DOMIMP","Domestic output and imports","MLT","Malta","Europe","CONS_ABR","Accomodation and food services","CONS_ABR","Mining and quarrying of non-energy producing products",2015,2015,"USD","US Dollar",6,"Millions",null,null,0.1],

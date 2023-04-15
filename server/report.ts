@@ -133,3 +133,19 @@ const OECD = oecdCoeficients({
 // CO_MSR provides costing
 
 // And that's how far I got going from Z to A.
+
+
+/*
+
+const chainSteps = [Mine, Refine, First use, End use, Recycling];
+const consumers = [Direct effect, First round, Industrial support, Income effect]
+const variables = [Value, Labour, Employees, Tax, Output]
+const proyection = [Low, Base, High]
+
+for...of chainSteps
+  for...of consumers
+    for...of variables
+      for...of proyection
+        getTheValue(chainStep, consumer, variable, proyection);
+
+ */

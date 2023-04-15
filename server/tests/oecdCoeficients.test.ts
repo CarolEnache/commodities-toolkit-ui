@@ -214,4 +214,122 @@ describe('oecdCoefficients util', () => {
       });
     });
   }
+
+  if (
+    typeof coefficients.typeII !== 'undefined' &&
+    typeof coefficients.typeII.TOTAL !== 'undefined'
+  ) {
+    describe('when type II TOTAL is returned', () => {
+      const { typeII } = coefficients;
+      it('matches industry 01T03', () => {
+        assert.strictEqual(
+          parseFloat(
+            `${typeII.TOTAL.getValueByName('TTL_01T03', 'D01T03') || 0}`
+          ).toFixed(7),
+          '1.3197538'
+        );
+        assert.strictEqual(
+          parseFloat(
+            `${typeII.TOTAL.getValueByName('TTL_01T03', 'D05T06') || 0}`
+          ).toFixed(7),
+          '0.0544819'
+        );
+        assert.strictEqual(
+          parseFloat(
+            `${typeII.TOTAL.getValueByName('TTL_01T03', 'D07T08') || 0}`
+          ).toFixed(7),
+          '0.0696857'
+        );
+        assert.strictEqual(
+          parseFloat(
+            `${typeII.TOTAL.getValueByName('TTL_01T03', 'D09') || 0}`
+          ).toFixed(7),
+          '0.0746848'
+        );
+      });
+      it('matches industry 05T06', () => {
+        assert.strictEqual(
+          parseFloat(
+            `${typeII.TOTAL.getValueByName('TTL_05T06', 'D05T06') || 0}`
+          ).toFixed(7),
+          '1.1235844'
+        );
+      });
+      it('matches industry 07T08', () => {
+        assert.strictEqual(
+          parseFloat(
+            `${typeII.TOTAL.getValueByName('TTL_07T08', 'D07T08') || 0}`
+          ).toFixed(7),
+          '1.0768230'
+        );
+      });
+      it('matches industry 09', () => {
+        assert.strictEqual(
+          parseFloat(
+            `${typeII.TOTAL.getValueByName('TTL_09', 'D09') || 0}`
+          ).toFixed(7),
+          '1.1609358'
+        );
+      });
+    });
+  }
+
+  if (
+    typeof coefficients.typeII !== 'undefined' &&
+    typeof coefficients.typeII.DOMESTIC !== 'undefined'
+  ) {
+    describe('when type II DOMESTIC is returned', () => {
+      const { typeII } = coefficients;
+      it('matches industry 01T03', () => {
+        assert.strictEqual(
+          parseFloat(
+            `${typeII.DOMESTIC.getValueByName('DOM_01T03', 'D01T03') || 0}`
+          ).toFixed(7),
+          '1.2700237'
+        );
+        assert.strictEqual(
+          parseFloat(
+            `${typeII.DOMESTIC.getValueByName('DOM_01T03', 'D05T06') || 0}`
+          ).toFixed(7),
+          '0.0371807'
+        );
+        assert.strictEqual(
+          parseFloat(
+            `${typeII.DOMESTIC.getValueByName('DOM_01T03', 'D07T08') || 0}`
+          ).toFixed(7),
+          '0.0461345'
+        );
+        assert.strictEqual(
+          parseFloat(
+            `${typeII.DOMESTIC.getValueByName('DOM_01T03', 'D09') || 0}`
+          ).toFixed(7),
+          '0.0506527'
+        );
+      });
+      it('matches industry 05T06', () => {
+        assert.strictEqual(
+          parseFloat(
+            `${typeII.DOMESTIC.getValueByName('DOM_05T06', 'D05T06') || 0}`
+          ).toFixed(7),
+          '1.0813368'
+        );
+      });
+      it('matches industry 07T08', () => {
+        assert.strictEqual(
+          parseFloat(
+            `${typeII.DOMESTIC.getValueByName('DOM_07T08', 'D07T08') || 0}`
+          ).toFixed(7),
+          '1.0606439'
+        );
+      });
+      it('matches industry 09', () => {
+        assert.strictEqual(
+          parseFloat(
+            `${typeII.DOMESTIC.getValueByName('DOM_09', 'D09') || 0}`
+          ).toFixed(7),
+          '1.1530426'
+        );
+      });
+    });
+  }
 });

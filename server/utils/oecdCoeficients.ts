@@ -1,4 +1,4 @@
-import { OECDRawInputOutput } from './dataStorage';
+import { OECDRawInputOutput, OECDEmployment } from './dataStorage';
 import Matrix, { mmult } from './mathjsMatrix';
 import { closed as leontief } from './leontief';
 import { OECD_UNUSED_SECTOR_TO, OECD_UNUSED_SECTOR_FROM } from '../constants';
@@ -69,8 +69,8 @@ const getOECDInputs = (OECDRawData: Table) => {
   const variables = Object.keys(oecdInputs) as OECDRawVariables[];
   variables.forEach((VAR) => {
     const input = oecdInputs[VAR] as Matrix; // Developers say: It's always defined Typescript :joy:
-    const colReference = (input.cols || []).sort((a,b) => a > b ? 1 : -1);
-    const rowReference = (input.rows || []).sort((a,b) => a > b ? 1 : -1);
+    const colReference = structuredClone(input.cols || []).sort((a,b) => a > b ? 1 : -1);
+    const rowReference = structuredClone(input.rows || []).sort((a,b) => a > b ? 1 : -1);
     sortedOecdInputs[VAR] = new Matrix({
       cols: colReference,
       rows: rowReference,
@@ -103,9 +103,6 @@ const getOECDDirectRequirements = ({ oecdInputs, selectedRegion }: { oecdInputs:
         'VALU',
         col
       );
-      if (totalValue === 0) {
-        console.log('totalValue col', VAR, col);
-      }
       let totalOutput: number = 0;
       if (col === 'HFCE') {
         /**
@@ -116,9 +113,6 @@ const getOECDDirectRequirements = ({ oecdInputs, selectedRegion }: { oecdInputs:
         totalOutput = Number(
           oecdInputs[OECDRawVariables.TOTAL]?.getValueByName('OUTPUT', col)
         );
-      }
-      if (totalOutput === 0) {
-        console.log('totalOutput col', VAR, col);
       }
 
       oecdInputs[VAR]?.rows
@@ -265,8 +259,14 @@ const getOECDTypes = (
 
   const laborVal = oecdTypeII.TTL?.cols.map((colName) => {
     const labrValue =
-      (oecdDirectRequirements.VAL?.getValueByName('LABR', colName) as number) || 0; // TODO: Try with 1 as fallback
-    // TODO: Add the minimum check from the other table
+      (oecdDirectRequirements.VAL?.getValueByName('LABR', colName) as number) || 0;
+    // TODO: Add the minimum check from the Employement table
+    // OECDEmployment
+    // =IF(IO_Region="Global",SUMIFS('OECD Employment'!$R:$R,'OECD Employment'!$E:$E,"<>Other",'OECD Employment'!$H:$H,D$164,'OECD Employment'!$A:$A,$B166),SUMIFS('OECD Employment'!$R:$R,'OECD Employment'!$E:$E,IO_Region,'OECD Employment'!$H:$H,D$164,'OECD Employment'!$A:$A,$B166))
+    // 'OECD Employment'!$R:$R => Value
+    // 'OECD Employment'!$E:$E => Region
+    // 'OECD Employment'!$H:$H => IND
+    // 'OECD Employment'!$A:$A => VAR ?
     return Math.min(labrValue);
   });
   oecdTypeII.TTL.setRow('Labour Cost', laborVal);
@@ -312,12 +312,12 @@ export const oecdCoeficients = ({ selectedRegion = REGIONS.GLOBAL } = {}) => {
     oecdInputs,
     DirectRequirements: oecdDirectRequirements, // ✅
     // oecdTypePrimitive,
-    // typeI: oecdTypeI, // ✅
+    typeI: oecdTypeI, // ✅
     /**
      * BUG: Type II is not returning the same value as the spreadsheet
      * There's HFCE being incorrect in the sheet, but even changing that keeps wrong
      * direct requirements is correct, something changes in between
      */
-    // typeII: oecdTypeII, // ❌
+    typeII: oecdTypeII, // ❌
   };
 };
