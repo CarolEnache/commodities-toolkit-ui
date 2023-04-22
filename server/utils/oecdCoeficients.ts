@@ -37,6 +37,34 @@ const filterByRegion = (selectedRegion: string) => (row: Row) => {
   return true;
 };
 
+// Returns a Matrix with the INDustries as the columns and VAR as rows
+// With the value aggregated by region
+const getOECDEmployment = (selectedRegion: string) => {
+  const employment = structuredClone(OECDEmployment);
+  // TODO: ? is the right function
+  const cols = employment.unshift();
+  return OECDEmployment
+    .slice(1) // TODO: remove the title row, this may not be necessary due the unshift
+    .filter() // TODO: filter by region
+/*
+filter(
+  if selectedRegion === REGIONS.GLOBAL && region !== 'Other'
+  else true
+*/
+    .reduce((sum, eachRow) => {
+      const VAR = eachRow[0];
+      const IND = eachRow[0]; // ?
+      const VALUE = eachRow[0]; // ?
+      // And aggregate each column in the right subarray
+      sum = new Matrix()
+      // or
+      sum.setValueByName(VAR, IND, (previous: number) => previous + VALUE);
+      return sum;
+    }, new Matrix({
+      cols
+    }));
+}
+
 const getOECDInputs = (OECDRawData: Table) => {
   // ✅ Approved by Carol
   const oecdInputs: OECDVariableSheet = {};
@@ -260,6 +288,8 @@ const getOECDTypes = (
   const laborVal = oecdTypeII.TTL?.cols.map((colName) => {
     const labrValue =
       (oecdDirectRequirements.VAL?.getValueByName('LABR', colName) as number) || 0;
+    const xxx = getOECDEmployment('yyy');
+    const employmentValue = xxx.getValueByName(colName, colName); // ?? Right cols row
     // TODO: Add the minimum check from the Employement table
     // OECDEmployment
     // =IF(IO_Region="Global",SUMIFS('OECD Employment'!$R:$R,'OECD Employment'!$E:$E,"<>Other",'OECD Employment'!$H:$H,D$164,'OECD Employment'!$A:$A,$B166),SUMIFS('OECD Employment'!$R:$R,'OECD Employment'!$E:$E,IO_Region,'OECD Employment'!$H:$H,D$164,'OECD Employment'!$A:$A,$B166))
@@ -267,7 +297,7 @@ const getOECDTypes = (
     // 'OECD Employment'!$E:$E => Region
     // 'OECD Employment'!$H:$H => IND
     // 'OECD Employment'!$A:$A => VAR ?
-    return Math.min(labrValue);
+    return Math.min(labrValue, employmentValue);
   });
   oecdTypeII.TTL.setRow('Labour Cost', laborVal);
   oecdTypeII.DOMIMP.setRow('Labour Cost', laborVal);
