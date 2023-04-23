@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "script:parse-xls": "node --loader tsx ./server/parse-xls.ts $1",
     "test": "node --loader tsx --test --watch ./server/tests/index.test.ts | tap-on"
   },
   "dependencies": {
