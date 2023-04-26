@@ -5,7 +5,12 @@ this needs to:
 // load the xls library
 // load the file from the arguments
 // 
+import XLSX from 'xlsx';
 import readline from 'readline';
+import fs from 'fs';
+import { execSync } from 'child_process';
+
+XLSX.set_fs(fs);
 
 const testFallback = () => {
   console.log('\033[33m⚠️ You need to pass a valid file as an argument, using ./data/benchmark.xlsx for demo purposes.\033[0m\n');
@@ -30,25 +35,29 @@ const userInput = (() => {
 
   console.log(`Reading ${taskSetup.selectedFile}...`);
   // get the sheets, prompt which sheets to parse
-  await new Promise(res => setTimeout(res, 1000));
+  const workbook = XLSX.readFile(taskSetup.selectedFile);
 
-  const nameList = await userInput(`\nWhich sheet do you want to parse? (comma separated for multiple sheets)\n${['demo', 'list']}\n\n> `) as string;
+  const nameList = await userInput(`\nWhich sheet do you want to parse? (comma separated for multiple sheets)\n${workbook.SheetNames}\n\n> `) as string;
   console.log('\r');
 
   // split by comma, iterate, check if valid sheetnames, and parse
   await Promise.all(nameList.split(',').map(async sheetName => {
 
     console.log(`Parsing ${sheetName}...`);
-    await new Promise(res => setTimeout(res, 1000));
+    const table = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
     // save to filesystem
-    const dummyTable = Array(1000 + Math.floor(Math.random()*1000)).fill(Array(Math.floor(Math.random()*10)).fill(0));
     // take the row 0, stringify, take the length of the string as the byte size of a row, divide the desired file size by this length, that's the number of rows per file
-    const sizeOfRow = JSON.stringify(dummyTable[0]).length;
-    const numRowsPerFile = 7000 / sizeOfRow;
+    const sizeOfRow = JSON.stringify(table[0]).length;
+    const numRowsPerFile = 7000000 / sizeOfRow;
     // for...iterate until all rows are saved, name files with .part0.json names
-    for (let i = 0; (i * numRowsPerFile) < dummyTable.length; i += 1) {
-      const outputFile = `${taskSetup.outputFolder}/${taskSetup.selectedFile.split('/').pop()?.replace(/\.[^\.]+$/, '')}.${sheetName}.part${i}.json`;
+    for (let i = 0; (i * numRowsPerFile) < table.length; i += 1) {
+      const outputFile = `${taskSetup.outputFolder}/${sheetName}.part${i}.json`;
       console.log(`Saving ${outputFile}`);
+      execSync(`mkdir -p ${taskSetup.outputFolder}`, { cwd: process.cwd() });
+      fs.writeFileSync(outputFile, JSON.stringify(table.slice(
+        (i) * numRowsPerFile,
+        (i + 1) * numRowsPerFile
+      )));
     }
   }));
 
