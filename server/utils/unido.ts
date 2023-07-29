@@ -1,15 +1,15 @@
-import { UnideRAV } from "./dataStorage";
+import { UnidoRaw } from "./dataStorage";
 import {
   UnidoTitles,
   AccumulatorIndexCacheType,
-  UnideRAVtype,
+  UnidoRawType,
   RestructuredCurrentType,
 } from "./types";
 
 const accumulatorIndexCache: AccumulatorIndexCacheType = {};
 
 export const unido = () =>
-  (UnideRAV as UnideRAVtype)
+  (UnidoRaw as UnidoRawType)
     .slice(1)
     .reduce((accumulator: RestructuredCurrentType[], current: string[]) => {
       const restructuredCurrent: RestructuredCurrentType = {

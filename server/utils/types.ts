@@ -80,7 +80,7 @@ export enum UnidoTitles {
 }
 
 export type AccumulatorIndexCacheType = Record<string, number>;
-export type UnideRAVtype = string[][];
+export type UnidoRawType = string[][];
 export type RestructuredCurrentType = {
   "Table Description": string;
   Region: string;
