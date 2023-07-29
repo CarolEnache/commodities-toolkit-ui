@@ -27,6 +27,29 @@ export enum OECDRawVariables {
   VALUE_ADDED = "VAL",
 }
 
+export enum OECDEmploymentTitles {
+  VAR,
+  Indicator,
+  COU,
+  Country,
+  Region,
+  PAR,
+  Partner,
+  IND,
+  Industry,
+  TIME,
+  Time,
+  UnitCode,
+  Unit,
+  PowerCodeCode,
+  PowerCode,
+  ReferencePeriodCode,
+  ReferencePeriod,
+  Value,
+  FlagCodes,
+  Flags,
+}
+
 export type MatrixIndex = number;
 export type ColumnName = string;
 export type RowName = string;
