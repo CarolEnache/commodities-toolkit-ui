@@ -12,11 +12,11 @@ import UnidoREV3Part5 from "../../data/UNIDO/REV3/MINSTAT.part5.json";
 import UnidoREV4Part0 from "../../data/UNIDO/REV4/MINSTAT.part0.json";
 import UnidoRECYCLING from "../../data/UNIDO/REV3/RECYCLING.part0.json";
 
-export { default as CoEndUse } from "../../data/MSR/COBALT/Co_End_Use.part0.json";
-export { default as CoFirstUse } from "../../data/MSR/COBALT/Co_First_Use.part0.json";
-export { default as CoEndUseDistribution } from "../../data/MSR/COBALT/Co_End_Use_Distribution.part0.json";
-export { default as CoFirstUseDistribution } from "../../data/MSR/COBALT/Co_First_Use_Distribution.part0.json";
-export { default as MSRRawData } from "../../data/MSR/COBALT/Co_MSR_Raw_Data.part0.json";
+export { default as CoEndUse } from "../../data/MSR/COBALT/Co_End_Use.new.json";
+export { default as CoFirstUse } from "../../data/MSR/COBALT/Co_First_Use.new.json";
+export { default as CoEndUseDistribution } from "../../data/MSR/COBALT/Co_End_Use_Distribution.new.json";
+export { default as CoFirstUseDistribution } from "../../data/MSR/COBALT/Co_First_Use_Distribution.new.json";
+export { default as MSRRawData } from "../../data/MSR/COBALT/Co_MSR_Raw_Data.new.json";
 
 const OECDRawInputOutput = [].concat(
   OECDRawPart0 as [],

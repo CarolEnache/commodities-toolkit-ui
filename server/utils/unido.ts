@@ -6,10 +6,10 @@ import {
   RestructuredCurrentType,
 } from "./types";
 
-const accumulatorIndexCache: AccumulatorIndexCacheType = {};
-
-export const unido = () =>
-  (UnidoRaw as UnidoRawType)
+export const unido = () => {
+  const accumulatorIndexCache: AccumulatorIndexCacheType = {};
+  
+  return (UnidoRaw as UnidoRawType)
     .slice(1)
     .reduce((accumulator: RestructuredCurrentType[], current: string[]) => {
       const restructuredCurrent: RestructuredCurrentType = {
@@ -36,3 +36,4 @@ export const unido = () =>
 
       return accumulator;
     }, []);
+};
