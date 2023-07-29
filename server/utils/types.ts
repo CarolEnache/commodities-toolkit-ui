@@ -61,3 +61,30 @@ export type Table = Row[];
 export type ArgValue = CellValue | ((previousValue: CellValue) => CellValue);
 
 export type OECDVariableSheet = { [P in OECDRawVariables]?: Matrix };
+
+export enum UnidoTitles {
+  TableCode,
+  TableDescription,
+  CountryCode,
+  CountryDescription,
+  Year,
+  ISIC,
+  ISICDescription,
+  ISICCombination,
+  Value,
+  TableDefinitionCode,
+  TableDescriptionLong,
+  SourceCode,
+  Unit,
+  Region,
+}
+
+export type AccumulatorIndexCacheType = Record<string, number>;
+export type UnideRAVtype = string[][];
+export type RestructuredCurrentType = {
+  "Table Description": string;
+  Region: string;
+  Year: string;
+  ISIC: string;
+  Value: number;
+};
