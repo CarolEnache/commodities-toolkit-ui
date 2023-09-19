@@ -149,7 +149,7 @@ const getOECDDirectRequirements = ({ oecdInputs, selectedRegion }: { oecdInputs:
       let totalOutput: number = 0;
       if (col === 'HFCE') {
         /**
-         * TODO: This comes OECD Income using the "last year" (hardcoded to 2019 in the sheet)
+         * TODO: SEA-35 This comes OECD Income using the "last year" (hardcoded to 2019 in the sheet)
          */
         totalOutput = 32889721200329.3;
       } else {
