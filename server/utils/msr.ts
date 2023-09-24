@@ -9,6 +9,8 @@ import {
 } from "./dataStorage";
 import { CoEndUseDistributionTitles, CoEndUseTitles, CoFirstUseDistributionTitles, CoFirstUseTitles } from "./types";
 
+const MAX_FORECASTING_YEAR = new Date('2030-01-01').getFullYear();
+
 // TODO - Reach out to Johann to share the RAWdata for the CoEndUse, CoFirstUse
 // TODO revisit this file to make the code DRY - essspecially - getEndUseDistribution and getFirstUseDistribution
 
@@ -18,12 +20,17 @@ const toAccumulatorKey = (...args: string[]) => args.join('-');
 const getEndUseDistribution = () => {
   const commodityApplications = CoEndUseDistribution[0].slice(3); // TODO - replce slice with a way to map to the correct data in a more dynamic way 
   const rows = CoEndUseDistribution.slice(1);
+  const Products = new Set<string>();
+  const ConsumerApplications = new Set<string>();
+  const latestYearInAvailableData = Number(rows[rows.length - 1][CoFirstUseDistributionTitles.Year]);
   const totalByApplicationsAndYear = rows.reduce((accumulator, row) => {
     const ceva = {
       Product: `${row[CoEndUseDistributionTitles.CobaltProduct]}`,
       Year: `${row[CoEndUseDistributionTitles.Year]}`,
       Application: `${row[CoEndUseDistributionTitles.Application]}`,
     };
+    Products.add(ceva.Product);
+    ConsumerApplications.add(ceva.Application);
     // All the applications
     commodityApplications.forEach(commodityApplication => {
       const key = toAccumulatorKey(ceva.Application, ceva.Year, commodityApplication);
@@ -38,13 +45,14 @@ const getEndUseDistribution = () => {
   const productDistributionNormalisedByYearAndProduct = rows.reduce((accumulator, row) => {
     const ceva = {
       Product: `${row[CoEndUseDistributionTitles.CobaltProduct]}`,
-      Year: `${row[CoEndUseDistributionTitles.Year]}`,
+      Year: Number(row[CoEndUseDistributionTitles.Year]),
       Application: `${row[CoEndUseDistributionTitles.Application]}`,
     };
     commodityApplications.forEach(commodityApplicationRaw => {
       const commodityApplication = `${commodityApplicationRaw}`;
-      const key = toAccumulatorKey(ceva.Application, ceva.Year, ceva.Product);
-      const totalKey = toAccumulatorKey(ceva.Application, ceva.Year, commodityApplication);
+      const year = `${ceva.Year}`;
+      const key = toAccumulatorKey(ceva.Application, year, ceva.Product);
+      const totalKey = toAccumulatorKey(ceva.Application, year, commodityApplication);
       const total = totalByApplicationsAndYear[totalKey];
 
       const value = Number(row[CoEndUseDistributionTitles[commodityApplication]]) || 0;
@@ -55,17 +63,34 @@ const getEndUseDistribution = () => {
     return accumulator;
   }, {} as Record<string, Record<string, number>>);
 
+  // TODO: We didn't checked if this is good data, but we assumed the same as for firstUseDistribution
+  Products.forEach(product => {
+    ConsumerApplications.forEach(application => {
+      const referenceKey = toAccumulatorKey(application, `${latestYearInAvailableData}`, product);
+      new Array(MAX_FORECASTING_YEAR - latestYearInAvailableData).fill(1).forEach((_a, index) => {
+        const forecastedYear = latestYearInAvailableData + 1 + index;
+        const key = toAccumulatorKey(application, `${forecastedYear}`, product);
+
+        productDistributionNormalisedByYearAndProduct[key] = structuredClone(productDistributionNormalisedByYearAndProduct[referenceKey]);
+        productDistributionNormalisedByYearAndProduct[key].Year = forecastedYear;
+      });
+    });
+  });
+
   return productDistributionNormalisedByYearAndProduct;
 };
 
 const getFirstUseDistribution = () => {
   const consumerApplications = CoFirstUseDistribution[0].slice(2);
   const rows = CoFirstUseDistribution.slice(1);
+  const Products = new Set<string>();
+  const latestYearInAvailableData = Number(rows[rows.length - 1][CoFirstUseDistributionTitles.Year]);
   const totalByApplicationsAndYear = rows.reduce((accumulator, row) => {
     const ceva = {
       Product: `${row[CoFirstUseDistributionTitles.CobaltProduct]}`,
       Year: `${row[CoFirstUseDistributionTitles.Year]}`,
     };
+    Products.add(ceva.Product);
     // All the applications
     consumerApplications.forEach(consumerApplication => {
       const key = toAccumulatorKey(ceva.Year, consumerApplication);
@@ -81,20 +106,32 @@ const getFirstUseDistribution = () => {
   const productDistributionNormalisedByYearAndProduct = rows.reduce((accumulator, row) => {
     const ceva = {
       Product: `${row[CoFirstUseDistributionTitles.CobaltProduct]}`,
-      Year: `${row[CoFirstUseDistributionTitles.Year]}`,
+      Year: Number(row[CoFirstUseDistributionTitles.Year]),
     };
     consumerApplications.forEach(consumerApplication => {
-      const key = toAccumulatorKey(ceva.Year, ceva.Product);
-      const totalKey = toAccumulatorKey(ceva.Year, consumerApplication);
+      const key = toAccumulatorKey(`${ceva.Year}`, ceva.Product);
+      const totalKey = toAccumulatorKey(`${ceva.Year}`, `${consumerApplication}`);
       const total = totalByApplicationsAndYear[totalKey];
 
       const value = Number(row[CoFirstUseDistributionTitles[consumerApplication]]) || 0;
       accumulator[key] = accumulator[key] || ceva;
       const normalisedValue = (value / total);
-      accumulator[key][consumerApplication] = (accumulator[key][consumerApplication] || 0) + (normalisedValue || 0);
+      accumulator[key][`${consumerApplication}`] = (accumulator[key][`${consumerApplication}`] || 0) + (normalisedValue || 0);
     });
     return accumulator;
   }, {} as Record<string, Record<string, number>>);
+
+  // TODO: Improve forecast, more or less they look good with this approach, we assume the same value as in 2021 for the rest of the years until 2030
+  Products.forEach(product => {
+    const referenceKey = toAccumulatorKey(`${latestYearInAvailableData}`, product);
+    new Array(MAX_FORECASTING_YEAR - latestYearInAvailableData).fill(1).forEach((_a, index) => {
+      const forecastedYear = latestYearInAvailableData + 1 + index;
+      const key = toAccumulatorKey(`${forecastedYear}`, product);
+
+      productDistributionNormalisedByYearAndProduct[key] = structuredClone(productDistributionNormalisedByYearAndProduct[referenceKey]);
+      productDistributionNormalisedByYearAndProduct[key].Year = forecastedYear;
+    });
+  });
 
   return productDistributionNormalisedByYearAndProduct;
 };
@@ -201,7 +238,7 @@ export const msr = () => {
     // CoEndUse: CoEndUse[0].slice(3),
     //   CoEndUse: CoEndUse[0],
     // CoFirstUse: CoFirstUse[0].slice(2),
-      CoFirstUse: getFirstUse(),
+    CoFirstUse: getFirstUse(),
     // CoEndUseDistribution: getEndUseDistribution(),
     // CoFirstUseDistribution: getFirstUseDistribution(),
     //   MSRRawData: ,
