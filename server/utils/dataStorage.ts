@@ -18,6 +18,8 @@ export { default as CoEndUseDistribution } from "../../data/MSR/COBALT/Co_End_Us
 export { default as CoFirstUseDistribution } from "../../data/MSR/COBALT/Co_First_Use_Distribution.new.json";
 export { default as MSRRawData } from "../../data/MSR/COBALT/Co_MSR_Raw_Data.new.json";
 
+export { default as CoPrices } from '../../data/MARKETS/COBALT/prices.json';
+
 const OECDRawInputOutput = [].concat(
   OECDRawPart0 as [],
   OECDRawPart1 as [],

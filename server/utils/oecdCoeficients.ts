@@ -149,7 +149,7 @@ const getOECDDirectRequirements = ({ oecdInputs, selectedRegion }: { oecdInputs:
       let totalOutput: number = 0;
       if (col === 'HFCE') {
         /**
-         * TODO: This comes OECD Income using the "last year" (hardcoded to 2019 in the sheet)
+         * TODO: SEA-35 This comes OECD Income using the "last year" (hardcoded to 2019 in the sheet)
          */
         totalOutput = 32889721200329.3;
       } else {
@@ -229,7 +229,7 @@ const getOECDDirectRequirements = ({ oecdInputs, selectedRegion }: { oecdInputs:
           col,
           totalIntermediateExpenditureAtPurchasePrices - Number(domesticIntermediates)
         );
-        oecdDirectRequirements[VAR]?.setValueByName('Employees', col, 0); // TODO: To really calculate them
+        oecdDirectRequirements[VAR]?.setValueByName('Employees', col, 0); // TODO: SEA-41 To really calculate them
 
         const operationgSurplusGross = oecdDirectRequirements[VAR]?.getValueByName('GOPS', col); // Row 98 @ Direct Requirements
         /**
@@ -240,17 +240,17 @@ const getOECDDirectRequirements = ({ oecdInputs, selectedRegion }: { oecdInputs:
         const estimatedCorporateTax = Number(operationgSurplusGross) * SETTINGS[selectedRegion]['Corporate Rate 2020'];
         oecdDirectRequirements[VAR]?.setValueByName('Estimated corporate tax', col, estimatedCorporateTax);
         oecdDirectRequirements[VAR]?.setValueByName('Operating surplus, net', col, Number(operationgSurplusGross) - estimatedCorporateTax);
-        oecdDirectRequirements[VAR]?.setValueByName('Estimated dividend tax', col, 0.0296654806780018); // TODO: ASK AGUSTIN - HARDCODED NUMBERS
+        oecdDirectRequirements[VAR]?.setValueByName('Estimated dividend tax', col, 0.0296654806780018); // TODO: SEA-44 ASK AGUSTIN - HARDCODED NUMBERS
 
-        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (imports) | Income', col, 0); // TODO: 
-        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (imports) | Employment', col, 0); // TODO: 
-        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (imports) | Taxes', col, 0); // TODO: 
+        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (imports) | Income', col, 0); // TODO: SEA-44
+        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (imports) | Employment', col, 0); // TODO: SEA-44
+        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (imports) | Taxes', col, 0); // TODO: SEA-44
 
-        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (domestic) | Output', col, 0); // TODO: 
-        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (domestic) | Value Added', col, 0); // TODO: 
-        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (domestic) | Income', col, 0); // TODO: 
-        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (domestic) | Employment', col, 0); // TODO: 
-        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (domestic) | Taxes', col, 0); // TODO: 
+        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (domestic) | Output', col, 0); // TODO: SEA-44
+        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (domestic) | Value Added', col, 0); // TODO: SEA-44
+        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (domestic) | Income', col, 0); // TODO: SEA-44
+        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (domestic) | Employment', col, 0); // TODO: SEA-44
+        oecdDirectRequirements[VAR]?.setValueByName('Direct Effects (domestic) | Taxes', col, 0); // TODO: SEA-44
       }
     });
   });
