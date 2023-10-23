@@ -274,7 +274,8 @@ const getFirstUse = ({
   selectedAssetMsrStart: number;
   selectedAssetMsrEnd: number;
 }) => {
-  const commodityApplications = CoFirstUse[0].slice(2) as string[];
+  const headerOffset = 2;
+  const commodityApplications = CoFirstUse[0].slice(headerOffset) as string[];
   const rows = CoFirstUse.slice(1) as (string[] | number[])[];
   const firstUseDistribution = Object.values(getFirstUseDistribution());
 
@@ -288,7 +289,7 @@ const getFirstUse = ({
         const firstUseCombined = commodityApplications.reduce<
           Record<string, number | string>
         >((acc, header, index) => {
-          acc[header] = Number(row[index]) * distribution[header];
+          acc[header] = Number(row[index + headerOffset]) * distribution[header];
 
           return acc;
         }, {});
