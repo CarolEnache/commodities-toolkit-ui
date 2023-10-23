@@ -92,7 +92,7 @@ export type RestructuredCurrentType = {
 export enum CoFirstUseTitles {
   Region,
   Year,
-  "Adhesion",
+  "Adhesion (inc. rubber adhesion agent)",
   "Batteries",
   "Biotech – animal feed and fertiliser",
   "Biotech – biogas production",
@@ -107,7 +107,7 @@ export enum CoFirstUseTitles {
   "Carbide Diamond Tools",
   "Bespoke/Niche Applications",
   "Biotech - fermentation, biotech processes, health and medicine",
-  "Others",
+  "Other",
 }
 export enum CoFirstUseDistributionTitles {
   Year,
