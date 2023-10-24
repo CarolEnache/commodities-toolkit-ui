@@ -188,3 +188,5 @@ export enum MSRRawDataTitles {
   CoRelatedValueAdded_inUSDMillions,
   TotalAssetValue_inUSDMillions
 }
+
+export type ForecastType = 'low' | 'base' | 'high'
