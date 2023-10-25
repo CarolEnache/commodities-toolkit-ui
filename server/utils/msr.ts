@@ -190,7 +190,7 @@ const getFirstUseDistribution = () => {
   return productDistributionNormalisedByYearAndProduct;
 };
 
-const getPricingAndForecast = () => {
+const getPricingAndForecast = (): Record<string, any> => {
   const years = CoPrices[0].slice(1);
   const rows = CoPrices;
   const CURRENT_YEAR = new Date("2021-01-01").getFullYear();
@@ -215,41 +215,41 @@ const getPricingAndForecast = () => {
     const D14 = Number(rows[13].slice(1)[index]);
 
     const rowYear = D1; // D1 // year
-    const metals = D2; // D2
+    const metal = D2; // D2
     const salts = (D7 + D12) / 2; // avg D7,D12
     const oxides = (D9 + D10) / 2; // avg D9,D10
     const carboxylates = (D6 + D7 + D8 + D9 + D10 + D11 + D12 + D13) / 8; // avg D6,D13
-    const scraps = metals - D14; // D20 - D16
-    const chamicals =
+    const scraps = metal - D14; // D20 - D16
+    const chemicals =
       (D4 + D5 + D6 + D7 + D8 + D9 + D10 + D11 + D12 + D13) / 10; // avg D4,D13
 
     const base = {
-      metals,
+      metal,
       salts,
       oxides,
       carboxylates,
       scraps,
-      chamicals,
+      chemicals,
     };
     let low, high;
 
-    // TODO: Improve forcasting with a data-driven forecasting tool
+    // TODO: Improve forecasting with a data-driven forecasting tool
     if (isForecast) {
       low = {
-        metals: base.metals * 0.8,
+        metal: base.metal * 0.8,
         salts: base.salts * 0.8,
         oxides: base.oxides * 0.8,
         carboxylates: base.carboxylates * 0.8,
         scraps: base.scraps * 0.8,
-        chamicals: base.chamicals * 0.8,
+        chemicals: base.chemicals * 0.8,
       };
       high = {
-        metals: base.metals * 1.2,
+        metal: base.metal * 1.2,
         salts: base.salts * 1.2,
         oxides: base.oxides * 1.2,
         carboxylates: base.carboxylates * 1.2,
         scraps: base.scraps * 1.2,
-        chamicals: base.chamicals * 1.2,
+        chemicals: base.chemicals * 1.2,
       };
     } else {
       low = base;
@@ -289,7 +289,8 @@ const getFirstUse = ({
         const firstUseCombined = commodityApplications.reduce<
           Record<string, number | string>
         >((acc, header, index) => {
-          acc[header] = Number(row[index + headerOffset]) * distribution[header];
+          acc[header] =
+            Number(row[index + headerOffset]) * distribution[header];
 
           return acc;
         }, {});
@@ -302,7 +303,34 @@ const getFirstUse = ({
       });
   });
 
-  return firstUseWithProduct;
+  const pricing = getPricingAndForecast();
+
+  const firstUseWithProductAndForecast = firstUseWithProduct.flatMap(
+    (product) => {
+      const forecastType = ["low", "base", "high"];
+      const currentYearForecast = pricing.find(
+        (forecast: { year: string | number }) => forecast.year === product.Year
+      );
+      return forecastType.map((type: string) => {
+        const price =
+          currentYearForecast[type][`${product.Product}`.toLowerCase()];
+
+        return Object.keys(product).reduce<Record<string, string | number>>(
+          (acc, curr) => {
+            if (!["Product", "Year", "Country"].includes(curr)) {
+              acc[curr] = Number(product[curr]) * price;
+            } else {
+              acc[curr] = product[curr];
+            }
+            return acc;
+          },
+          { forecastType: type }
+        );
+      });
+    }
+  );
+
+  return firstUseWithProductAndForecast;
 };
 
 export const msr = ({
@@ -330,6 +358,5 @@ export const msr = ({
     // CoEndUseDistribution: getEndUseDistribution(),
     // CoFirstUseDistribution: getFirstUseDistribution(),
     //   MSRRawData: ,
-    // PricingAndForecast: getPricingAndForecast()
   };
 };
