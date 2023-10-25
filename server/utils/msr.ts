@@ -219,7 +219,7 @@ const getPricingAndForecast = (): Record<string, any> => {
     const salts = (D7 + D12) / 2; // avg D7,D12
     const oxides = (D9 + D10) / 2; // avg D9,D10
     const carboxylates = (D6 + D7 + D8 + D9 + D10 + D11 + D12 + D13) / 8; // avg D6,D13
-    const scraps = metal - D14; // D20 - D16
+    const scrap = metal - D14; // D20 - D16
     const chemicals =
       (D4 + D5 + D6 + D7 + D8 + D9 + D10 + D11 + D12 + D13) / 10; // avg D4,D13
 
@@ -228,7 +228,7 @@ const getPricingAndForecast = (): Record<string, any> => {
       salts,
       oxides,
       carboxylates,
-      scraps,
+      scrap,
       chemicals,
     };
     let low, high;
@@ -240,7 +240,7 @@ const getPricingAndForecast = (): Record<string, any> => {
         salts: base.salts * 0.8,
         oxides: base.oxides * 0.8,
         carboxylates: base.carboxylates * 0.8,
-        scraps: base.scraps * 0.8,
+        scrap: base.scrap * 0.8,
         chemicals: base.chemicals * 0.8,
       };
       high = {
@@ -248,7 +248,7 @@ const getPricingAndForecast = (): Record<string, any> => {
         salts: base.salts * 1.2,
         oxides: base.oxides * 1.2,
         carboxylates: base.carboxylates * 1.2,
-        scraps: base.scraps * 1.2,
+        scrap: base.scrap * 1.2,
         chemicals: base.chemicals * 1.2,
       };
     } else {
@@ -330,7 +330,34 @@ const getFirstUse = ({
     }
   );
 
-  return firstUseWithProductAndForecast;
+  const averageOfTonnes = firstUseWithProductAndForecast
+    .filter(
+      (current) =>
+        current.Country === selectedRegion.toLocaleUpperCase() &&
+        Number(current.Year) >= selectedAssetMsrStart &&
+        Number(current.Year) <= selectedAssetMsrEnd
+    )
+    .reduce(
+      (acc, curr) => {
+        commodityApplications.forEach((application) => {
+          // @ts-ignore
+          acc[curr.forecastType][application] =
+            // @ts-ignore
+            curr[application] /
+              (selectedAssetMsrEnd - selectedAssetMsrStart + 1) +
+            // @ts-ignore
+            (acc[curr.forecastType][application] || 0);
+        });
+
+        return acc;
+      },
+      { high: {}, base: {}, low: {} }
+    );
+
+  return {
+    averageOfTonnes,
+    firstUseWithProductAndForecast,
+  };
 };
 
 export const msr = ({
