@@ -13,6 +13,7 @@ import {
   CoFirstUseTitles,
 } from "./types";
 import { REGIONS, SETTINGS } from "./auxiliary";
+import { HARDCODED_ValueAdditionAtFirstUse } from "./unido-dardcoded-footprint";
 
 const MAX_FORECASTING_YEAR = new Date("2030-01-01").getFullYear();
 
@@ -401,6 +402,7 @@ const getEndUse = ({
         endUseCombined.Country = country;
         endUseCombined.Year = year;
         endUseCombined.Product = distribution.Product;
+        endUseCombined.CommodityApplication = commodityApplication;
 
         return endUseCombined;
       });
@@ -419,8 +421,15 @@ const getEndUse = ({
 
       return Object.keys(product).reduce<Record<string, string | number>>(
         (acc, curr) => {
-          if (!["Product", "Year", "Country"].includes(curr)) {
-            acc[curr] = Number(product[curr]) * price;
+          if (
+            !["Product", "Year", "Country", "CommodityApplication"].includes(
+              curr
+            )
+          ) {
+            acc[curr] =
+              Number(product[curr]) *
+              price *
+              HARDCODED_ValueAdditionAtFirstUse[product.CommodityApplication];
           } else {
             acc[curr] = product[curr];
           }
@@ -456,10 +465,11 @@ const getEndUse = ({
     );
 
   return {
-    // averageOfTonnes,
-    endUseWithProductAndForecast,
+    averageOfTonnes,
+    endUseWithProductAndForecast, // with an error of max 1% 
   };
 };
+
 
 export const msr = ({
   selectedRegion = REGIONS.GLOBAL,
