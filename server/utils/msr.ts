@@ -13,6 +13,7 @@ import {
   CoFirstUseTitles,
 } from "./types";
 import { REGIONS, SETTINGS } from "./auxiliary";
+import { HARDCODED_ValueAdditionAtFirstUse } from "./unido-dardcoded-footprint";
 
 const MAX_FORECASTING_YEAR = new Date("2030-01-01").getFullYear();
 
@@ -59,14 +60,18 @@ const getEndUseDistribution = () => {
       const ceva = {
         Product: `${row[CoEndUseDistributionTitles.CobaltProduct]}`,
         Year: Number(row[CoEndUseDistributionTitles.Year]),
-        Application: `${row[CoEndUseDistributionTitles.Application]}`,
+        CommodityApplication: `${row[CoEndUseDistributionTitles.Application]}`,
       };
       commodityApplications.forEach((commodityApplicationRaw) => {
         const commodityApplication = `${commodityApplicationRaw}`;
         const year = `${ceva.Year}`;
-        const key = toAccumulatorKey(ceva.Application, year, ceva.Product);
+        const key = toAccumulatorKey(
+          ceva.CommodityApplication,
+          year,
+          ceva.Product
+        );
         const totalKey = toAccumulatorKey(
-          ceva.Application,
+          ceva.CommodityApplication,
           year,
           commodityApplication
         );
@@ -85,7 +90,6 @@ const getEndUseDistribution = () => {
     {} as Record<string, Record<string, number>>
   );
 
-  // TODO: We didn't checked if this is good data, but we assumed the same as for firstUseDistribution
   Products.forEach((product) => {
     ConsumerApplications.forEach((application) => {
       const referenceKey = toAccumulatorKey(
@@ -360,6 +364,113 @@ const getFirstUse = ({
   };
 };
 
+const getEndUse = ({
+  selectedRegion,
+  selectedAssetMsrStart,
+  selectedAssetMsrEnd,
+}: {
+  selectedRegion: string;
+  selectedAssetMsrStart: number;
+  selectedAssetMsrEnd: number;
+}) => {
+  const headerOffset = 3;
+  const consumerApplications = CoEndUse[0].slice(headerOffset) as string[];
+  const rows = CoEndUse.slice(1) as (string[] | number[])[];
+  const endUseDistribution = Object.values(getEndUseDistribution());
+
+  const endUseWithProduct = rows.flatMap((row) => {
+    const commodityApplication = row[0];
+    const country = row[1];
+    const year = row[2];
+
+    return endUseDistribution
+      .filter(
+        (distribution) =>
+          distribution.Year === year &&
+          commodityApplication === distribution.CommodityApplication
+      )
+      .map((distribution) => {
+        const endUseCombined = consumerApplications.reduce<
+          Record<string, number | string>
+        >((acc, header, index) => {
+          acc[header] =
+            Number(row[index + headerOffset]) * distribution[header];
+
+          return acc;
+        }, {});
+
+        endUseCombined.Country = country;
+        endUseCombined.Year = year;
+        endUseCombined.Product = distribution.Product;
+        endUseCombined.CommodityApplication = commodityApplication;
+
+        return endUseCombined;
+      });
+  });
+
+  const pricing = getPricingAndForecast();
+
+  const endUseWithProductAndForecast = endUseWithProduct.flatMap((product) => {
+    const forecastType = ["low", "base", "high"];
+    const currentYearForecast = pricing.find(
+      (forecast: { year: string | number }) => forecast.year === product.Year
+    );
+    return forecastType.map((type: string) => {
+      const price =
+        currentYearForecast[type][`${product.Product}`.toLowerCase()];
+
+      return Object.keys(product).reduce<Record<string, string | number>>(
+        (acc, curr) => {
+          if (
+            !["Product", "Year", "Country", "CommodityApplication"].includes(
+              curr
+            )
+          ) {
+            acc[curr] =
+              Number(product[curr]) *
+              price *
+              HARDCODED_ValueAdditionAtFirstUse[product.CommodityApplication];
+          } else {
+            acc[curr] = product[curr];
+          }
+          return acc;
+        },
+        { forecastType: type }
+      );
+    });
+  });
+
+  const averageOfTonnes = endUseWithProductAndForecast
+    .filter(
+      (current) =>
+        current.Country === selectedRegion.toLocaleUpperCase() &&
+        Number(current.Year) >= selectedAssetMsrStart &&
+        Number(current.Year) <= selectedAssetMsrEnd
+    )
+    .reduce(
+      (acc, curr) => {
+        consumerApplications.forEach((application) => {
+          // @ts-ignore
+          acc[curr.forecastType][application] =
+            // @ts-ignore
+            curr[application] /
+              (selectedAssetMsrEnd - selectedAssetMsrStart + 1) +
+            // @ts-ignore
+            (acc[curr.forecastType][application] || 0);
+        });
+
+        return acc;
+      },
+      { high: {}, base: {}, low: {} }
+    );
+
+  return {
+    averageOfTonnes,
+    endUseWithProductAndForecast, // with an error of max 1% 
+  };
+};
+
+
 export const msr = ({
   selectedRegion = REGIONS.GLOBAL,
   selectedAssetMsrStart = 2022,
@@ -377,7 +488,12 @@ export const msr = ({
     // CoEndUse: CoEndUse[0].slice(3),
     //   CoEndUse: CoEndUse[0],
     // CoFirstUse: CoFirstUse[0].slice(2),
-    CoFirstUse: getFirstUse({
+    // CoFirstUse: getFirstUse({
+    //   selectedRegion,
+    //   selectedAssetMsrStart,
+    //   selectedAssetMsrEnd,
+    // }),
+    CoEndUse: getEndUse({
       selectedRegion,
       selectedAssetMsrStart,
       selectedAssetMsrEnd,
