@@ -22,6 +22,10 @@ export const unido = () => {
 
       if (isNaN(restructuredCurrent.Value)) restructuredCurrent.Value = 0;
 
+      if (restructuredCurrent.ISIC === '2211' && restructuredCurrent["Table Description"] === 'Establishments' && restructuredCurrent.Year === '2010') {
+        console.log(restructuredCurrent);
+      }
+
       const cacheKey = Object.values(restructuredCurrent)
         .slice(0, -1)
         .toString();

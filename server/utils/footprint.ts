@@ -1,6 +1,7 @@
 import { COBALT_HARDCODED_MODEL } from "../constants";
 import { REGIONS } from "./auxiliary";
 import { oecdCoeficients } from "./oecdCoeficients";
+import { RestructuredCurrentType } from "./types";
 import { unido } from "./unido";
 
 export const getOECDData = () => {
@@ -8,15 +9,7 @@ export const getOECDData = () => {
   return footprint;
 };
 
-interface UnidoObject {
-  "Table Description": string;
-  Region: string;
-  ISIC: string;
-  Year: number;
-  Value: number;
-}
-
-const gapFillingKey = (current: UnidoObject) =>
+const gapFillingKey = (current: RestructuredCurrentType) =>
   `${current["Table Description"]}-${current.Region}-${current.ISIC}`;
 
 /*
@@ -26,7 +19,7 @@ original: [8866, 9116, 9526, 9598, 10102, 10506, 9832, 0, 0, 0, 0, 0, 0, 264, 26
 filled: [8866, 9116, 9526, 9598, 10102, 10506, 9832, 9832, 9832, 9832, 9832, 9832, 9832, 264, 267, 261]
 We can see that a trend between 9832 and 264 would be a better predictor than keeping the same value.
 */
-const gapFilling = (unidoArray: UnidoObject[]) => {
+const gapFilling = (unidoArray: RestructuredCurrentType[]) => {
   let lastKnownValue: Record<string, number> = {};
 
   return unidoArray.map((current) => {
@@ -44,42 +37,35 @@ const gapFilling = (unidoArray: UnidoObject[]) => {
   });
 };
 
-type getUnidoDataFn = (params: { selectedRegion: string }) => void;
+type getUnidoDataFn = (params?: { selectedRegion?: string }) => void;
 
-export const getUnidoData: getUnidoDataFn = ({ selectedRegion }) => {
+export const getUnidoData: getUnidoDataFn = ({ selectedRegion = REGIONS.GLOBAL } = {}) => {
   const unidoData = unido();
 
-  COBALT_HARDCODED_MODEL.reduce((acc, curr) => {
-    // const ceva = {
-    //   "Table Description": ,//0
-    //   ISIC: ,//isic,
-    //   Year: ,//isic,
-    //   Value: ,//,
-    // };
-
-    unidoData.filter(
+  return COBALT_HARDCODED_MODEL.slice(1,2).flatMap((curr) => {
+    const isicData = unidoData.filter(
       (data) =>
         (selectedRegion === REGIONS.GLOBAL
           ? true
-          : selectedRegion === data.Region) && data.ISIC === curr.ISIC
+          : selectedRegion === data.Region) && data.ISIC === curr.ISIC && data["Table Description"] === 'Establishments' && data.Year === '2010'
     );
 
-    // if (selectedRegion === REGIONS.GLOBAL) {
-    //   // we sum them
-    // } else if () {
-    //   // we filter
-    // }
+    return Object.values(isicData.reduce((acc, data) => {
+      const key = `${data["Table Description"]}-${data.Year}`;
 
-    //     unidoData.
-    //     "Table
-    // Region
-    // Year
-    // ISIC
-    // Value
-    //     acc += curr.ISIC * curr.weight
-    //     // does it match year, region, etc...?
-    //     acc += curr
-  }, []);
+      if (acc[key]) {
+        acc[key].Value += ` + ${data.Value || 0} * ${curr.weight}`;
+      } else {
+        acc[key] = structuredClone(data);
+        acc[key].Value = `${acc[key].Value || 0} * ${curr.weight}`;
+        if (selectedRegion === REGIONS.GLOBAL) {
+          acc[key].Region = selectedRegion;
+        }
+      }
+
+      return acc;
+    }, {} as Record<string, RestructuredCurrentType>));
+  });
 };
 
 // TODO: COBALT_HARDCODED_MODEL
