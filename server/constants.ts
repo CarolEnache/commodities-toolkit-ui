@@ -20,7 +20,31 @@ export const OECD_UNUSED_SECTOR_FROM: string[] = [
   "TTL_INT_FNL",
 ];
 
-// TODO: Model to use in the footprint, these are the ISIC codes to iterate for Unido
+export const FORM_DATA = {
+  selectedAssetModel: 'COBALT',
+  selectedAssetMarket: 'COBALT',
+  selectedAssetModesValue: 'Base product value + value addition',
+  selectedAssetModesFirstUse: 'Average',
+  selectedAssetModesEndUse: 'Yes',
+  selectedAssetIncomeEffects: 'Yes',
+  selectedAssetMsr: 'All Products',
+  selectedAssetMsrStart: 2022,
+  selectedAssetMsrEnd: 2030,
+  selectedAssetMsrProducts: 'All Products',
+  selectedEconomyUnido: 'UNIDO/REV4',
+  selectedEconomyUnidoStart: 2010,
+  selectedEconomyUnidoEnd: 2021,
+  selectedEconomyOecd: 'OECD/2015',
+  selectedRegion: 'Europe', // 'North America',
+  // generatedReportId: crypto.randomUUID(),
+  selectedReportCompiler: 'Socio-Economic Analysis Toolkit',
+  selectedReportOrg: 'Cobalt Institute',
+  selectedReportCopy: 'Socio-Economic Analyser',
+  selectedReportAuthors: 'Johann Wiebe, Carol Enache, Cesar Costas',
+};
+
+
+// TODO: COBALT_HARDCODED_MODEL | Model to use in the footprint, these are the ISIC codes to iterate for Unido
 export const COBALT_HARDCODED_MODEL = [
   { OECD: "D20T21", ISIC: "2029", weight: 0.2 },
   { OECD: "D20T21", ISIC: "2211", weight: 1 },

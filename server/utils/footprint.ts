@@ -1,5 +1,6 @@
-import { COBALT_HARDCODED_MODEL } from "../constants";
+import { COBALT_HARDCODED_MODEL, FORM_DATA } from "../constants";
 import { REGIONS } from "./auxiliary";
+import { msr } from "./msr";
 import { oecdCoeficients } from "./oecdCoeficients";
 import { RestructuredCurrentType } from "./types";
 import { unido } from "./unido";
@@ -37,53 +38,51 @@ const gapFilling = (unidoArray: RestructuredCurrentType[]) => {
   });
 };
 
-type getUnidoDataFn = (params?: { selectedRegion?: string }) => void;
+type getUnidoDataFn = (params?: { selectedRegion?: string, selectedEconomyUnidoStart?: number,
+  selectedEconomyUnidoEnd?: number }) => void;
 
-export const getUnidoData: getUnidoDataFn = ({ selectedRegion = REGIONS.GLOBAL } = {}) => {
+export const getUnidoData: getUnidoDataFn = ({
+  selectedRegion = FORM_DATA.selectedRegion,
+  selectedEconomyUnidoStart = FORM_DATA.selectedEconomyUnidoStart,
+  selectedEconomyUnidoEnd = FORM_DATA.selectedEconomyUnidoEnd,
+} = {}) => {
   const unidoData = unido();
 
-  return COBALT_HARDCODED_MODEL.slice(1,2).flatMap((curr) => {
+  return COBALT_HARDCODED_MODEL.flatMap((curr) => {
     const isicData = unidoData.filter(
       (data) =>
         (selectedRegion === REGIONS.GLOBAL
           ? true
-          : selectedRegion === data.Region) && data.ISIC === curr.ISIC && data["Table Description"] === 'Establishments' && data.Year === '2010'
+          : selectedRegion === data.Region) &&
+        data.ISIC === curr.ISIC &&
+        data.Year && (
+          data.Year >= selectedEconomyUnidoStart &&
+          data.Year <= selectedEconomyUnidoEnd
+        )
     );
 
-    return Object.values(isicData.reduce((acc, data) => {
-      const key = `${data["Table Description"]}-${data.Year}`;
+    return Object.values(
+      gapFilling(isicData).reduce((acc, data) => {
+        const key = `${data["Table Description"]}`;
 
-      if (acc[key]) {
-        acc[key].Value += ` + ${data.Value || 0} * ${curr.weight}`;
-      } else {
-        acc[key] = structuredClone(data);
-        acc[key].Value = `${acc[key].Value || 0} * ${curr.weight}`;
-        if (selectedRegion === REGIONS.GLOBAL) {
-          acc[key].Region = selectedRegion;
+        if (acc[key]) {
+          acc[key].Value += (data.Value || 0) * curr.weight;
+        } else {
+          acc[key] = structuredClone(data);
+          delete acc[key].Year;
+          acc[key].Value = (acc[key].Value || 0) * curr.weight;
+          if (selectedRegion === REGIONS.GLOBAL) {
+            acc[key].Region = selectedRegion;
+          }
         }
-      }
 
-      return acc;
-    }, {} as Record<string, RestructuredCurrentType>));
+        return acc;
+      }, {} as Record<string, RestructuredCurrentType>)
+    );
   });
 };
 
-// TODO: COBALT_HARDCODED_MODEL
-/*
-
-Take the "table UNIDO blah" which is our array
-I4 = "Table Description" = Establishments
-"ISIC" = "ISIC" = 2211
-if GLOBAL {
-  Sum the Regions
-} else {
-  "Region" == "Region"
-}
-if it can't be found return 0
-
-.reduce((acc, curr) => {
-  // does it match year, region, etc...?
-  acc += curr
-}, 0) * F33
-
-*/
+export const getMSRData = () => {
+  const x = msr();
+  return x;
+};

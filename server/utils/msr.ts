@@ -14,6 +14,7 @@ import {
 } from "./types";
 import { REGIONS, SETTINGS } from "./auxiliary";
 import { HARDCODED_ValueAdditionAtFirstUse } from "./unido-dardcoded-footprint";
+import { FORM_DATA } from "../constants";
 
 const MAX_FORECASTING_YEAR = new Date("2030-01-01").getFullYear();
 
@@ -472,9 +473,9 @@ const getEndUse = ({
 
 
 export const msr = ({
-  selectedRegion = REGIONS.GLOBAL,
-  selectedAssetMsrStart = 2022,
-  selectedAssetMsrEnd = 2030,
+  selectedRegion = FORM_DATA.selectedRegion,
+  selectedAssetMsrStart = FORM_DATA.selectedAssetMsrStart,
+  selectedAssetMsrEnd = FORM_DATA.selectedAssetMsrEnd,
 } = {}) => {
   // REGION
 

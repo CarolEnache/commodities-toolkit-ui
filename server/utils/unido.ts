@@ -15,16 +15,12 @@ export const unido = () => {
       const restructuredCurrent: RestructuredCurrentType = {
         "Table Description": current[UnidoTitles.TableDescription],
         Region: current[UnidoTitles.Region],
-        Year: current[UnidoTitles.Year],
+        Year: Number(current[UnidoTitles.Year]),
         ISIC: current[UnidoTitles.ISIC],
         Value: Number(current[UnidoTitles.Value]),
       };
 
       if (isNaN(restructuredCurrent.Value)) restructuredCurrent.Value = 0;
-
-      if (restructuredCurrent.ISIC === '2211' && restructuredCurrent["Table Description"] === 'Establishments' && restructuredCurrent.Year === '2010') {
-        console.log(restructuredCurrent);
-      }
 
       const cacheKey = Object.values(restructuredCurrent)
         .slice(0, -1)
