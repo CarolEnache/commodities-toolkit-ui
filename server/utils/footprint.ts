@@ -47,6 +47,7 @@ export const getUnidoData: getUnidoDataFn = ({
   selectedEconomyUnidoEnd = FORM_DATA.selectedEconomyUnidoEnd,
 } = {}) => {
   const unidoData = unido();
+  const numberOfYears = selectedEconomyUnidoEnd - selectedEconomyUnidoStart + 1;
 
   return COBALT_HARDCODED_MODEL.flatMap((curr) => {
     const isicData = unidoData.filter(
@@ -61,24 +62,27 @@ export const getUnidoData: getUnidoDataFn = ({
         )
     );
 
-    return Object.values(
+    const x =
       gapFilling(isicData).reduce((acc, data) => {
         const key = `${data["Table Description"]}`;
 
         if (acc[key]) {
-          acc[key].Value += (data.Value || 0) * curr.weight;
+          acc[key].Value += (data.Value || 0) * curr.weight / numberOfYears;
         } else {
           acc[key] = structuredClone(data);
           delete acc[key].Year;
-          acc[key].Value = (acc[key].Value || 0) * curr.weight;
+          acc[key].Value = (acc[key].Value || 0) * curr.weight / numberOfYears;
           if (selectedRegion === REGIONS.GLOBAL) {
             acc[key].Region = selectedRegion;
           }
         }
 
         return acc;
-      }, {} as Record<string, RestructuredCurrentType>)
-    );
+      }, {} as Record<string, RestructuredCurrentType>);
+
+    // x['Value Added'] = x['Value Added'].map(b => {b.Value =b.Value / x['Output'].find(wher is equal b).Value); return b; })
+
+    return Object.values(x);
   });
 };
 
