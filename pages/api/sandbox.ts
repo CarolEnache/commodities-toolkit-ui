@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 // import { oecdCoeficients } from '../../server/utils/oecdCoeficients';
 // import { unido } from '../../server/utils/unido';
 // import { getUnidoData } from '../../server/utils/footprint';
-import { handleFormRequest } from '../../server/holistic-approach/form-input';
+import { handleFormRequest } from '../../server/holistic-approach/query-handlers';
 // import { msr } from '../../server/utils/msr'
 // import { getOECDData } from '../../server/utils/footprint';
 

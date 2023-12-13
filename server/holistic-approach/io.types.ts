@@ -4,11 +4,11 @@ export type ModelID = "COBALT | Enache-Costas-2023" | "NICKEL" | "COPPER" | "HYD
 // The market ID allows to select the source for historical prices of the commodity
 export type MarketID = "COBALT | Wiebe-2019" | "NICKEL" | "COPPER" | "HYDROGEN";
 // The ID that points to certain MSR dataset
-export type MSRID = "COBALT INSTITUTE 2019";
+export type MSRID = string | "COBALT INSTITUTE 2019";
 // The ID that points to certain Unido dataset
 export type UNIDOID = "UNIDO | Wiebe 2015";
 // The ID that points to certain OECD dataset
-export type OECDID = "OECD | Wiebe 2015";
+export type OECDID = string | "OECD | Wiebe 2015";
 //#endregion
 /**
  * The forecast function allows to choose how to fill future data
@@ -25,7 +25,7 @@ enum ForecastFn {
 /**
  * First Use mode
  */
-enum FirstUseMode {
+export enum FirstUseMode {
   "ISIC sectorial analysis" = "ISIC sectorial analysis",
   "Representative Companies" = "Representative Companies",
   "Average" = "Average",
@@ -60,10 +60,7 @@ export interface FormData {
     region: string; // From the OECDID
     priceForecast: keyof typeof ForecastFn;
     products: string; // From the MSRID
-    firstUseMode:
-      | "ISIC sectorial analysis"
-      | "Representative Companies"
-      | "Average";
+    firstUseMode: FirstUseMode;
     include: {
       commodityValueAdded: boolean; // Base commodity value + (True? Value Added)
       firstUseValueAdded: boolean; // Value Added at First Use

@@ -1,3 +1,6 @@
+import { FormData } from "./io.types";
+import { getRegionsFrom } from "./selectors";
+
 type DataPoint = number;
 
 interface DataWithForecast {
@@ -7,48 +10,104 @@ interface DataWithForecast {
 }
 
 enum EconomicFactors {
-  DirectEffects = "Direct Effects",
-  FirstRound = "First Round",
-  InternationalSupport = "International Support",
+  DirectEffect = "Direct Effect",
+  // FirstRound = "First Round",
+  // InternationalSupport = "International Support",
+  UpstreamRequirements = "Upstream Requirements",
   IncomeEffect = "Income Effect",
+  Total = "Total",
+  Change = "Change",
 }
 
 enum ManufacturingStage {
-  Mining = "Mining",
-  Refining = "Refining",
-  FirstUse = "First Use",
-  EndUse = "End Use",
+  Mining = "Mine Production",
+  Refining = "Refined Production",
+  FirstUse = "Direct Applications",
+  EndUse = "End Manufactoring",
   Recycling = "Recycling",
+  Total = "Total",
 }
 
-interface ReportEntry {
-  employees: DataWithForecast;
-  factor: EconomicFactors;
-  labour: DataWithForecast;
-  output: DataWithForecast;
-  stage: ManufacturingStage;
-  tax: DataWithForecast;
-  value: DataWithForecast;
+enum ForecastingGroup {
+  LOW = "LOW",
+  BASE = "BASE",
+  HIGH = "HIGH",
 }
 
-export class Report {
-  factorsByStage: ReportEntry[] = [];
-  prices: any;
+type YearRangeString = `${string}-${string}`;
+// Properties exist
+type FactorsByStageReport = Record<
+  ForecastingGroup,
+  Record<
+    EconomicFactors,
+    Record<ManufacturingStage, Record<YearRangeString, number>>
+  >
+>;
+// Properties are optional while building
+type FactorsByStageReportBuilder = {
+  [A in ForecastingGroup]?: {
+    [B in EconomicFactors]?: {
+      [C in ManufacturingStage]?: {
+        [D in YearRangeString]?: number;
+      };
+    };
+  };
+};
+export const generateFactorsByStage = (
+  formData: FormData
+): FactorsByStageReport => {
+  const factorsByStage: FactorsByStageReportBuilder = {};
 
-  constructor() {
-    for (const manufacturingStage of Object.values(ManufacturingStage)) {
-      for (const economicFactor of Object.values(EconomicFactors)) {
-        const entry: ReportEntry = {
-          employees: { base: 0, high: 0, low: 0 },
-          factor: economicFactor,
-          labour: { base: 0, high: 0, low: 0 },
-          output: { base: 0, high: 0, low: 0 },
-          stage: manufacturingStage,
-          tax: { base: 0, high: 0, low: 0 },
-          value: { base: 0, high: 0, low: 0 },
-        };
-        this.factorsByStage.push(entry);
+  for (const forecastGroup of Object.values(ForecastingGroup)) {
+    factorsByStage[forecastGroup] = {};
+    for (const economicFactor of Object.values(EconomicFactors)) {
+      factorsByStage[forecastGroup]![economicFactor] = {};
+
+      for (const manufacturingStage of Object.values(ManufacturingStage)) {
+        factorsByStage[forecastGroup]![economicFactor]![manufacturingStage] =
+          {};
+      }
+
+      for (const manufacturingStage of Object.values(ManufacturingStage)) {
+        if (manufacturingStage === "Total") continue;
+
+        const future: YearRangeString = `${formData.source.industryMetric[0].startYear}-${formData.source.industryMetric[0].endYear}`;
+        const past: YearRangeString = `${formData.source.manufacturing.startYear}-${formData.source.manufacturing.endYear}`;
+        factorsByStage[forecastGroup]![economicFactor]![manufacturingStage]![
+          past
+        ] = Math.floor(10_000 * Math.random());
+        factorsByStage[forecastGroup]![economicFactor]![manufacturingStage]![
+          future
+        ] = Math.floor(10_000 * Math.random());
+        factorsByStage[forecastGroup]![economicFactor]!["Total"]![past] =
+          (factorsByStage[forecastGroup]![economicFactor]!["Total"]![past] ||
+            0) +
+          (factorsByStage[forecastGroup]?.[economicFactor]?.[
+            manufacturingStage
+          ]?.[past] || 0);
+        factorsByStage[forecastGroup]![economicFactor]!["Total"]![future] =
+          (factorsByStage[forecastGroup]![economicFactor]!["Total"]![future] ||
+            0) +
+          (factorsByStage[forecastGroup]?.[economicFactor]?.[
+            manufacturingStage
+          ]?.[future] || 0);
       }
     }
   }
-}
+
+  return factorsByStage as FactorsByStageReport;
+};
+
+export const generateReport = async (formData: FormData) => {
+  const regions = getRegionsFrom(formData.source.industryMatrix[0].id);
+
+  return regions.map((region) => {
+    return {
+      region,
+      employment: generateFactorsByStage(formData),
+      labourIncome: generateFactorsByStage(formData),
+      taxContribution: generateFactorsByStage(formData),
+      valueAddition: generateFactorsByStage(formData),
+    };
+  });
+};
