@@ -98,7 +98,16 @@ export const generateFactorsByStage = (
   return factorsByStage as FactorsByStageReport;
 };
 
-export const generateReport = async (formData: FormData) => {
+interface RegionalReport {
+  region: string,
+  employment: FactorsByStageReport,
+  labourIncome: FactorsByStageReport,
+  taxContribution: FactorsByStageReport,
+  valueAddition: FactorsByStageReport,
+}
+export type Report = RegionalReport[];
+
+export const generateReport = async (formData: FormData): Promise<Report> => {
   const regions = getRegionsFrom(formData.source.industryMatrix[0].id);
 
   return regions.map((region) => {
