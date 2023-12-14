@@ -36,7 +36,7 @@ enum ForecastingGroup {
 
 type YearRangeString = `${string}-${string}`;
 // Properties exist
-type FactorsByStageReport = Record<
+export type FactorsByStageReport = Record<
   ForecastingGroup,
   Record<
     EconomicFactors,
@@ -71,14 +71,14 @@ export const generateFactorsByStage = (
       for (const manufacturingStage of Object.values(ManufacturingStage)) {
         if (manufacturingStage === "Total") continue;
 
-        const future: YearRangeString = `${formData.source.industryMetric[0].startYear}-${formData.source.industryMetric[0].endYear}`;
-        const past: YearRangeString = `${formData.source.manufacturing.startYear}-${formData.source.manufacturing.endYear}`;
+        const past: YearRangeString = `${formData.source.industryMetric[0].startYear}-${formData.source.industryMetric[0].endYear}`;
+        const future: YearRangeString = `${formData.source.manufacturing.startYear}-${formData.source.manufacturing.endYear}`;
         factorsByStage[forecastGroup]![economicFactor]![manufacturingStage]![
           past
-        ] = Math.floor(10_000 * Math.random());
+        ] = 1;
         factorsByStage[forecastGroup]![economicFactor]![manufacturingStage]![
           future
-        ] = Math.floor(10_000 * Math.random());
+        ] = 1.2;
         factorsByStage[forecastGroup]![economicFactor]!["Total"]![past] =
           (factorsByStage[forecastGroup]![economicFactor]!["Total"]![past] ||
             0) +
