@@ -84,7 +84,7 @@ export type UnidoRawType = string[][];
 export type RestructuredCurrentType = {
   "Table Description": string;
   Region: string;
-  Year: string;
+  Year?: number;
   ISIC: string;
   Value: number;
 };

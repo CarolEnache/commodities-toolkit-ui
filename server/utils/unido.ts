@@ -15,20 +15,20 @@ export const unido = () => {
       const restructuredCurrent: RestructuredCurrentType = {
         "Table Description": current[UnidoTitles.TableDescription],
         Region: current[UnidoTitles.Region],
-        Year: current[UnidoTitles.Year],
+        Year: Number(current[UnidoTitles.Year]),
         ISIC: current[UnidoTitles.ISIC],
         Value: Number(current[UnidoTitles.Value]),
       };
 
-      if (isNaN(restructuredCurrent["Value"])) restructuredCurrent["Value"] = 0;
+      if (isNaN(restructuredCurrent.Value)) restructuredCurrent.Value = 0;
 
       const cacheKey = Object.values(restructuredCurrent)
         .slice(0, -1)
         .toString();
 
       if (accumulatorIndexCache[cacheKey]) {
-        accumulator[accumulatorIndexCache[cacheKey]]["Value"] +=
-          restructuredCurrent["Value"];
+        accumulator[accumulatorIndexCache[cacheKey]].Value +=
+          restructuredCurrent.Value;
       } else {
         accumulatorIndexCache[cacheKey] = accumulator.length;
         accumulator.push(restructuredCurrent);

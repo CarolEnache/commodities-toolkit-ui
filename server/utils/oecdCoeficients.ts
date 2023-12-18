@@ -1,7 +1,7 @@
 import { OECDRawInputOutput, OECDEmployment } from "./dataStorage";
 import Matrix, { mmult } from "./mathjsMatrix";
 import { closed as leontief } from "./leontief";
-import { OECD_UNUSED_SECTOR_TO, OECD_UNUSED_SECTOR_FROM } from "../constants";
+import { OECD_UNUSED_SECTOR_TO, OECD_UNUSED_SECTOR_FROM, FORM_DATA } from "../constants";
 import { REGIONS, SETTINGS } from "./auxiliary";
 import {
   OECDRawTitles,
@@ -431,7 +431,7 @@ const getOECDTypes = (
   };
 };
 
-export const oecdCoeficients = ({ selectedRegion = REGIONS.GLOBAL } = {}) => {
+export const oecdCoeficients = ({ selectedRegion = FORM_DATA.selectedRegion } = {}) => {
   const OECDRawData: Table = OECDRawInputOutput.slice(1) // Remove the sheet titles
     .filter(filterByRegion(selectedRegion));
 
