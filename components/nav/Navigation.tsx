@@ -7,8 +7,8 @@ export const Navigation = () => {
         <Link href="/" className={styles.navItem}>
           Home
         </Link>
-        <Link href="/" className={styles.navItem}>
-          Our Solution
+        <Link href="/report-configuration" className={styles.navItem}>
+            Try Our Solution
         </Link>
         <Link href="/about" className={styles.navItem}>
           About

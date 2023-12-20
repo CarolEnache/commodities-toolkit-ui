@@ -62,6 +62,8 @@ export const handleFormRequest = (
   // here to do whatever needed to parse the request
   // const formData = request...
 
+  console.log("request.body from report-configuration", request.body);
+
   generateReport(formData).then((report) => {
     response.status(200).json(report);
   });
