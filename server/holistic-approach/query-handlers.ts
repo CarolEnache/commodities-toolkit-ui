@@ -55,14 +55,14 @@ export const handleManufacturingSourceSelection = (
   response.status(200).json(getProductsFrom(manufacturingSources));
 };
 
-export const handleFormRequest = (
+export const handleFormRequest = async (
   request: NextApiRequest,
   response: NextApiResponse
 ) => {
   // here to do whatever needed to parse the request
   // const formData = request...
 
-  generateReport(formData).then((report) => {
-    response.status(200).json(report);
-  });
+  const report = await generateReport(formData);
+
+  response.status(200).json(report);
 };

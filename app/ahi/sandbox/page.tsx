@@ -1,11 +1,10 @@
-import type {
-  FactorsByStageReport,
-  Report,
-} from "../../../server/holistic-approach/report-output";
+import type { Report, FactorsByStageReport } from "../../../server/holistic-approach/report.types";
 
 import { use } from "react";
 
-import './styles.css';
+import { EconomicParameters } from "../../../server/holistic-approach/report.types";
+
+import "./styles.css";
 
 const PrintPage: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="print-page">{children}</div>
@@ -32,8 +31,10 @@ const Tables = ({
         <table cellSpacing={0}>
           <tbody>
             <tr>
-            <td rowSpan={7} className="table-vertical-header-container"><div className="table-vertical-header-text">{forecast}</div></td>
-            <td rowSpan={2}>Value Addition US$ mn</td>
+              <td rowSpan={7} className="table-vertical-header-container">
+                <div className="table-vertical-header-text">{forecast}</div>
+              </td>
+              <td rowSpan={2}>Value Addition US$ mn</td>
               {Object.keys(a.Total).map((stage) => (
                 <td key={`${title}-${forecast}-${stage}`} colSpan={2}>
                   {stage}
@@ -54,7 +55,7 @@ const Tables = ({
                 <td>{factor}</td>
                 {Object.values(b).map((dateRange) =>
                   Object.values(dateRange).map((value) => (
-                    <td key={`${title}-${forecast}-${factor}-${dateRange}`}>
+                    <td key={`${title}-${forecast}-${factor}-${value}`}>
                       {value}
                     </td>
                   ))
@@ -75,30 +76,64 @@ const Page = () => {
     <div>
       {reports.map((report) => {
         return (
-          <div key={report.region}>
+          <div key={report[EconomicParameters.region]}>
             <PrintPage>
-              <h2>{report.region}</h2>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce blandit arcu id justo suscipit lobortis. Cras consequat ante enim, vel vehicula purus fringilla id. Curabitur eu ultrices nunc. Nulla ut malesuada lectus. Suspendisse et sem sed leo lacinia sagittis quis et justo. Nulla eros metus, imperdiet ut aliquam at, vehicula vel massa. Integer nec aliquam lectus, eu tempor tellus. Quisque eget enim tellus. Maecenas scelerisque magna at lorem molestie ultrices. Duis facilisis metus venenatis dui dictum ullamcorper. Nulla arcu nisl, lobortis ut feugiat sit amet, pulvinar ac enim. Nulla fringilla, quam ac blandit porta, velit libero molestie ante, nec congue nibh eros nec dolor.
-
-Curabitur ac vulputate erat. Sed imperdiet arcu eget mauris porttitor, nec aliquam eros consequat. Nullam rutrum, libero sit amet porttitor malesuada, ex neque tempus elit, et lacinia nunc tellus ac magna. Mauris posuere scelerisque sem eget varius. Pellentesque malesuada tempor sem, id bibendum ante blandit id. Praesent finibus dolor mi, ut convallis lacus sodales at. Morbi placerat convallis lorem, ac pretium turpis consequat in. Nam a nisi quis tellus feugiat tincidunt sed non dui. Praesent urna tellus, iaculis a sollicitudin blandit, pharetra non urna. Nullam suscipit dolor non nisi bibendum vestibulum. In scelerisque nisl ornare ante sagittis molestie. Nullam malesuada ex quis gravida posuere. Ut blandit libero pulvinar ante scelerisque, sed volutpat lacus mollis. Vivamus rhoncus ipsum eget volutpat mollis. Suspendisse felis arcu, rhoncus eget gravida eu, cursus dictum nisi.
-
-Etiam orci lacus, fringilla cursus velit faucibus, interdum efficitur lacus. Etiam gravida massa lorem. Sed ornare, dolor id elementum suscipit, ex massa pretium ipsum, at pretium magna nunc non sem. Maecenas aliquet nec elit non hendrerit. Cras pharetra quis nulla nec suscipit. Aenean efficitur sollicitudin libero, at hendrerit magna congue non. Vivamus accumsan dignissim lacus bibendum porttitor. Aliquam sodales egestas semper. Mauris vel purus non tortor accumsan pellentesque. Donec in dapibus mauris, quis dictum risus. Phasellus suscipit malesuada turpis sed interdum. Nullam ornare dui sit amet erat pulvinar feugiat. Donec rutrum enim nec nisi egestas aliquam ac sit amet nibh. Maecenas pulvinar, dui et dictum consequat, sem justo tempus velit, non scelerisque mauris ipsum sed tellus. Praesent ut massa quis turpis ornare rhoncus finibus in ligula.
-
-Phasellus lacinia justo vitae mi vehicula bibendum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec ornare lacinia ante et sodales. Sed nisl sem, finibus dapibus diam non, bibendum varius quam. Praesent eget accumsan est, a faucibus tortor. Integer porttitor odio sit amet tempor semper. Nam a sem quis nisi posuere porttitor. Sed dapibus maximus dolor, posuere sollicitudin felis aliquam vitae. Ut id cursus dolor. Donec posuere aliquet tellus pharetra laoreet. Nulla consequat suscipit odio, quis lobortis eros elementum vitae. Duis et urna posuere, venenatis dolor eget, aliquet augue. Curabitur ipsum neque, condimentum sit amet nulla sit amet, sodales placerat enim. In non posuere nisi. Aenean tincidunt vulputate tellus non posuere. Suspendisse potenti.
-
-Curabitur eget mauris magna. Proin suscipit tincidunt ante, sed rhoncus diam porta in. Sed gravida elementum quam vel ornare. Phasellus maximus tellus orci, in hendrerit nunc sodales quis. Sed consectetur accumsan maximus. Duis euismod dictum neque vitae consectetur. Vestibulum interdum ipsum ac rutrum mollis. Duis aliquam turpis mauris, faucibus maximus mi tincidunt vitae. Morbi mattis ornare mauris, euismod ultricies sem faucibus in. Mauris nibh neque, tincidunt nec dolor nec, dictum ultrices nibh. Suspendisse eget malesuada neque, tempor pulvinar elit.</p>
+              <h2>{report[EconomicParameters.region]}</h2>
+              <p>
+                Socio-economic analysis plays a pivotal role in understanding the intricate web of interactions between social and economic factors that shape our communities. By scrutinizing the relationships between income, education, employment, and various other socio-economic indicators, analysts can unveil patterns and trends that inform policymakers, businesses, and organizations. This in-depth examination enables a more nuanced comprehension of societal challenges, helping to identify areas in need of intervention and support. For instance, a socio-economic analysis might reveal disparities in educational attainment across different demographic groups, prompting targeted initiatives to bridge the educational gap and promote social equity. The insights derived from such analyses serve as a compass for formulating effective strategies that address the root causes of societal issues, fostering inclusive and sustainable development.
+              </p>
+              <p>
+                Predictive models, powered by advanced algorithms and machine learning techniques, have revolutionized decision-making processes across various sectors. These models leverage historical data to forecast future trends, enabling businesses and organizations to make proactive and informed choices. In the realm of finance, predictive models analyze market trends and economic indicators to anticipate shifts, helping investors optimize their portfolios and mitigate risks. In healthcare, these models can predict disease outbreaks and aid in resource allocation for effective public health responses. Furthermore, predictive models are increasingly employed in criminal justice systems to assess the likelihood of recidivism, informing decisions about parole and rehabilitation programs. The integration of predictive modeling into decision-making processes empowers stakeholders to navigate uncertainty with greater confidence, fostering a more adaptive and resilient society.
+              </p>
+              <p>
+                Data-driven decisions represent a paradigm shift in how organizations derive actionable insights from vast and diverse datasets. The proliferation of technology has facilitated the collection and analysis of massive amounts of data, providing valuable information for strategic decision-making. Businesses can leverage customer data to personalize marketing strategies, optimize supply chain management, and enhance overall operational efficiency. Governments can utilize data to formulate evidence-based policies that address societal challenges, such as poverty, climate change, and public health crises. However, the effective implementation of data-driven decisions requires careful consideration of ethical considerations, privacy concerns, and the responsible use of data. Striking the right balance between harnessing the power of data and safeguarding individual rights is crucial for building a trustworthy and sustainable data-driven decision-making framework in the evolving landscape of the digital age.
+              </p>
             </PrintPage>
             <PrintPage>
-              <Tables title="Employment" data={report.employment} />
+              These tables show rows of IP Model from 70 to 166, columns:
+              - Mine production : D
+              - Refined production : F
+              - Direct applications : SUM(J , Y)
+              - End manufacturing : SUM(AA, AQ)
+              - Recycling : AS
+
+              The rows represent, in this order (each nesting is a layer deep):
+              - Low = Low
+              - Base = Base
+              - High = High
+                - Output = NOT_USED
+                - Income = Labour Income
+                - Value Added = Value addition
+                - Employment = Employment
+                - Taxes = Tax Contribution
+                  - Initial effect = Direct Effect
+                  - First-round coefficient (Type I) = First-round requirements = Upstream requirements
+                  - Industrial support coefficient (Type I) = Industrial support = Upstream requirements
+                  - Induced consumption coefficient (Type II) = Income Effect
+                  - Outside of region = NOT_USED
+                  - Indirect and induced, domestic = NOT_USED
+                  - Total, domestic = NOT_USED
+
+              Those 4 in the nesting, are:
+                The first D25*D47, D26, D27, D28, D30
+                The next 2: D25*D48, and so on increasing in the D48
+                The last one has a condition: IF include income, otherwise 0
+              This pattern repeats for all the columns D, F, J-Y, AA-AQ, AS 
+
+              D26 to D28 and D30 are what you'd expect: "Labour cost", "Value Added", "Employees" and "Taxes"
+              D25 is the cost of cobalt for the low scenario,
             </PrintPage>
             <PrintPage>
-              <Tables title="Labour Income" data={report.labourIncome} />
+              <Tables title={EconomicParameters.employment} data={report[EconomicParameters.employment]} />
             </PrintPage>
             <PrintPage>
-              <Tables title="Tax Contribution" data={report.taxContribution} />
+              <Tables title={EconomicParameters.labourIncome} data={report[EconomicParameters.labourIncome]} />
             </PrintPage>
             <PrintPage>
-              <Tables title="Value Addition" data={report.valueAddition} />
+              <Tables title={EconomicParameters.taxContribution} data={report[EconomicParameters.taxContribution]} />
+            </PrintPage>
+            <PrintPage>
+              <Tables title={EconomicParameters.valueAddition} data={report[EconomicParameters.valueAddition]} />
             </PrintPage>
           </div>
         );
