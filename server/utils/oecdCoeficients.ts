@@ -388,7 +388,6 @@ const getOECDTypes = (
     const retrn =
       (oecdDirectRequirements.VAL?.getValueByName("LABR", colName) as number) ||
       0;
-    console.log("log2", colName, retrn);
 
     return retrn;
   });
